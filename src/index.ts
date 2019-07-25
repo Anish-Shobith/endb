@@ -295,11 +295,11 @@ export default class Endb {
     } else {
       throw new EndbError('Database could not be loaded', 'EndbConnectionError');
     }
-    const table = this.db.prepare(`SELECT COUNT(*) FROM sqlite_master WHERE type = 'table' AND name = ?;`).get(this.name);
-    if (!table['COUNT(*)']) {
+    const table = this.db.prepare(`SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = ?;`).get(this.name);
+    if (!table['count(*)']) {
       this.db.prepare(`CREATE TABLE ${this.name} (key TEXT PRIMARY KEY, value TEXT);`).run();
-      this.db.pragma('synchronous = 1');
       if (this.wal) {
+        this.db.pragma('synchronous = 1');
         this.db.pragma('journal_mode = wal');
       }
     }
