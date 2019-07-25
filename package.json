@@ -5,8 +5,9 @@
   "main": "lib/index.js",
   "types": "lib",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -p . && npm run build:docs",
+    "start": "npm run build:docs && npm run build",
+    "test": "npm run build && node lib/test",
+    "build": "tsc -p .",
     "build:docs": "typedoc"
   },
   "repository": {

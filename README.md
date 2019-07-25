@@ -19,6 +19,7 @@ There are a few existing modules similar to endb, however, endb is different bec
 
 ## Installation
 > Node.js 8.9.4 or newer is required.
+> If installation-error persists, check out the [troubleshooting guide](https://github.com/JoshuaWise/better-sqlite3/blob/master/docs/troubleshooting.md)
 
 ### Windows
 - Open an administrative command prompt or powershell

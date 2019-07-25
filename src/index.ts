@@ -2,23 +2,23 @@ import { existsSync, mkdirSync } from 'fs';
 import { resolve, sep } from 'path';
 import SQLite from 'better-sqlite3';
 import { EndbError } from './EndbError';
-import { DatabaseOptions } from './DatabaseOptions';
+import { Options } from './Options';
 
 /**
  * A simplified & powerful key-value database wrapper for ease-of-use
  */
 export default class Endb {
-  public name: string;
-  public fileName: string;
-  public path: string;
-  public fileMustExist: boolean;
-  public timeout: number;
-  public ready: Function;
-  public isReady: boolean;
-  public onReady: Promise<Function>;
-  public onUpdateCallback: Function | null;
-  public isDestroyed: boolean;
-  private db: any;
+  name?: string;
+  fileName?: string;
+  path?: string;
+  fileMustExist?: boolean;
+  timeout?: number;
+  wal?: boolean;
+  ready!: Function;
+  isReady: boolean;
+  onReady: Promise<Function>;
+  isDestroyed: boolean;
+  db: SQLite.Database;
 
   /**
    * Initializes a new Database instance
@@ -28,33 +28,34 @@ export default class Endb {
    * @param [options.path] The path of the database file
    * @param [options.fileMustExist] Whether or not, the database file must exist
    * @param [options.timeout] The number of milliseconds to wait while executing queries on a locked database, before throwing a SQLITE_BUSY error
+   * @param [options.wal] The default method by which SQLite implements atomic commit and rollback is a rollback journal
    * ```typescript
    * const Endb = require('endb');
-   * const db = new Endb.Database({
-   *     name: 'endb',
-   *     fileName: 'endb',
-   *     path: './',
-   *     fileMustExist: false,
-   *     timeout: 3000
+   * const db = new Endb({
+   *   name: 'endb',
+   *   fileName: 'endb',
+   *   path: './',
+   *   fileMustExist: false,
+   *   timeout: 5000,
+   *   wal: true
    * });
    * ```
    */
-  constructor(options: DatabaseOptions = {}) {
+  constructor(options: Options = {}) {
     this.name = typeof options.name === 'string' ? options.name.replace(/[^a-z0-9]/gi, '_').toLowerCase() : 'endb';
     this.fileName = typeof options.fileName === 'string' ? options.fileName.replace(/[^a-zA-Z0-9]/g, '') : 'endb';
     this.path = typeof options.path === 'string' ? resolve(process.cwd(), options.path) : resolve(process.cwd(), './');
     this.fileMustExist = typeof options.fileMustExist === 'boolean' ? options.fileMustExist : false;
     this.timeout = typeof options.timeout === 'number' ? options.timeout : 5000;
-    this.ready = new Function;
+    this.wal = typeof options.wal === 'boolean' ? options.wal : true;
     this.isReady = false;
     this.onReady = new Promise(res => this.ready = res);
-    this.onUpdateCallback = null;
     this.isDestroyed = false;
     if (!existsSync(this.path)) mkdirSync(this.path);
     if (this.fileMustExist === true && !existsSync(this.fileName)) {
       throw new EndbError(`${this.fileName} does not exist in the directory`);
     }
-    this.db = new SQLite(`${this.path}${sep}${this.fileName}.sqlite`, {
+    this.db = new SQLite(`${this.path}${sep}${this.fileName}.db`, {
       fileMustExist: this.fileMustExist,
       timeout: this.timeout
     });
@@ -66,7 +67,7 @@ export default class Endb {
    * @returns The number of rows in the database
    */
   get count(): number {
-    const data: any = this.db.prepare(`SELECT COUNT(*) FROM ${this.name};`).get();
+    const data: any = this.db.prepare(`SELECT count(*) FROM ${this.name};`).get();
     return data['count(*)'];
   }
 
@@ -83,7 +84,7 @@ export default class Endb {
    * Deletes all the elements from the database
    * @returns undefined
    * ```javascript
-   * Database.clear();
+   * Endb.clear();
    * ```
    */
   public clear(): void {
@@ -95,7 +96,7 @@ export default class Endb {
    * WARNING: USING THE METHOD MAKES THE DATABASE UNUSEABLE
    * @returns undefined
    * ```javascript
-   * Database.close().then(console.log).catch(console.error);
+   * Endb.close().then(console.log).catch(console.error);
    * ```
    */
   public close(): void {
@@ -109,17 +110,13 @@ export default class Endb {
    * @param key The key of an element
    * @returns Whether or not, the key has been deleted
    * ```javascript
-   * Database.delete('key');
+   * Endb.delete('key');
    * ```
    */
   public delete(key: string | number): boolean {
     this.readyCheck();
     if (key == null || !['String', 'Number'].includes(key.constructor.name)) {
       throw new EndbError('Key must be a string or number', 'EndbTypeError');
-    }
-    const oldValue = this.get(key) || null;
-    if (typeof this.onUpdateCallback === 'function') {
-      this.onUpdateCallback(key, oldValue, null);
     }
     const data: object = this.db.prepare(`DELETE FROM ${this.name} WHERE key = ?;`).run(key);
     return typeof data !== null ? true : false;
@@ -129,7 +126,7 @@ export default class Endb {
    * Deletes all the elements from the database
    * @returns undefined
    * ```javascript
-   * Database.deleteAll();
+   * Endb.deleteAll();
    * ```
    */
   public deleteAll(): void {
@@ -143,7 +140,7 @@ export default class Endb {
    * WARNING: THIS METHOD WILL DESTROY YOUR DATA AND CANNOT BE UNDONE
    * @returns undefined
    * ```javascript
-   * Database.destroy();
+   * Endb.destroy();
    * ```
    */
   public destroy(): void {
@@ -157,7 +154,7 @@ export default class Endb {
    * Exports the database to JSON
    * @returns The data consisting of additional information and the elements
    * ```javascript
-   * Database.export();
+   * Endb.export();
    * ```
    */
   public export(): string {
@@ -176,7 +173,7 @@ export default class Endb {
    * @param prefix The prefix term to search for
    * @returns 
    * ```javascript
-   * Database.find('key');
+   * Endb.find('key');
    * ```
    */
   public find(prefix: string | number): object | null {
@@ -198,7 +195,7 @@ export default class Endb {
    * @param key The key of the element
    * @returns The value of the key.
    * ```javascript
-   * const data = Database.get('key');
+   * const data = Endb.get('key');
    * console.log(data);
    * ```
    */
@@ -220,7 +217,7 @@ export default class Endb {
    * @returns An array object consisting of all the elements of the database.
    * Returns empty if the database is empty
    * ```typescript
-   * const data = Database.getAll();
+   * const data = Endb.getAll();
    * console.log(data);
    * ```
    */
@@ -235,8 +232,8 @@ export default class Endb {
    * @param key The key of an element
    * @returns Whether or not, the element with the key exists in the database
    * ```typescript
-   * Database.has('key');
-   * if (Database.has('key')) {
+   * Endb.has('key');
+   * if (Endb.has('key')) {
    *  // ...
    * }
    * ```
@@ -263,44 +260,26 @@ export default class Endb {
   }
 
   /**
-   * Emitted whenever data is updated
-   * @param callback A callback which is emitted whenever the data is updated
-   * ```javascript
-   * Database.onUpdate((key, oldValue, newValue) => {
-   *   console.log(`${key} has been updated from ${oldValue} to ${newValue}`);
-   * });
-   * ```
-   */
-  public onUpdate(callback: Function) {
-    this.readyCheck();
-    this.onUpdateCallback = callback;
-  }
-
-  /**
    * Sets an element containing a key and a value
    * @param key The key of the element
    * @param value The value of the element
    * @returns An object containing the key and the value
    * ```javascript
-   * Database.set('key', 'value');
-   * Database.set('userExists', true);
-   * Database.set('profile', {
+   * Endb.set('key', 'value');
+   * Endb.set('userExists', true);
+   * Endb.set('profile', {
    *   id: 1234567890,
    *   username: 'user',
    *   description: 'a user',
    *   verified: true
    * });
-   * Database.set('keyArray', [ 'one', 'two', 3, 'four' ]);
+   * Endb.set('keyArray', [ 'one', 'two', 3, 'four' ]);
    * ```
    */
   public set(key: string | number, value: any): object {
     this.readyCheck();
     if (key == null || !['String', 'Number'].includes(key.constructor.name)) {
       throw new EndbError('Key must be a string or number', 'EndbKeyTypeError');
-    }
-    const oldValue = this.get(key) || null;
-    if (typeof this.onUpdateCallback === 'function') {
-      this.onUpdateCallback(key, oldValue, value);
     }
     this.db.prepare(`INSERT OR REPLACE INTO ${this.name} (key, value) VALUES (?, ?);`).run(key, JSON.stringify(value));
     return {
@@ -320,14 +299,16 @@ export default class Endb {
     if (!table['COUNT(*)']) {
       this.db.prepare(`CREATE TABLE ${this.name} (key TEXT PRIMARY KEY, value TEXT);`).run();
       this.db.pragma('synchronous = 1');
-      this.db.pragma('journal_mode = wal');
+      if (this.wal) {
+        this.db.pragma('journal_mode = wal');
+      }
     }
     this.ready();
     return this.onReady;
   }
 
   private readyCheck(): void {
-    if (!this.isReady) throw new EndbError('Database is not ready. Refer to the documentation to use Database.onReady', 'EndbConnectionError');
+    if (!this.isReady) throw new EndbError('Database is not ready. Refer to the documentation to use Endb.onReady', 'EndbConnectionError');
     if (this.isDestroyed) throw new EndbError('Database has been destroyed', 'EndbConnectionError');
   }
 }

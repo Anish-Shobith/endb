@@ -75,6 +75,8 @@
     "mode": "modules",
     "json": "docs/docs.json",
     "readme": "README.md",
-    "hideGenerator": true
+    "hideGenerator": true,
+    "includeDeclarations": true,
+    "disableOutputCheck": true
   }
 }
