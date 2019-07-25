@@ -1,6 +1,6 @@
 {
   "name": "endb",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "A simplified & powerful key-value database wrapper for ease-of-use",
   "main": "lib/index.js",
   "types": "lib",
