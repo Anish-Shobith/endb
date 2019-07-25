@@ -1,0 +1,37 @@
+{
+  "name": "endb",
+  "version": "1.0.0",
+  "description": "A simplified & powerful key-value database wrapper for ease-of-use",
+  "main": "lib/index.js",
+  "types": "lib",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p . && npm run build:docs",
+    "build:docs": "typedoc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chroventer/endb.git"
+  },
+  "keywords": [
+    "db",
+    "database",
+    "sqlite",
+    "sqlite3",
+    "store"
+  ],
+  "author": "chroventer <chroventer@gmail.com> (https://github.com/chroventer)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chroventer/endb/issues"
+  },
+  "homepage": "https://endb.js.org",
+  "devDependencies": {
+    "@types/better-sqlite3": "^5.4.0",
+    "@types/node": "^12.6.8",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "better-sqlite3": "^5.4.1"
+  }
+}
