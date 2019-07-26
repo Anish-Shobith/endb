@@ -8,9 +8,11 @@
 </p>
 
 ## About
+
 A simplified & powerful key-value database wrapper for ease-of-use
 
 There are a few existing modules similar to endb, however, endb is different because it:
+
 - Has a simple Promise-based API
 - Is easily embeddable inside another module
 - Can handle all SQLite types
@@ -18,28 +20,30 @@ There are a few existing modules similar to endb, however, endb is different bec
 - Supports the current active LTS version of Node.js or higher
 
 ## Installation
-> Node.js 8.9.4 or newer is required.
+
+> Node.js 10.0 or newer is required.
 > If installation-error persists, check out the [troubleshooting guide](https://github.com/JoshuaWise/better-sqlite3/blob/master/docs/troubleshooting.md)
 
 ### Windows
+
 - Open an administrative command prompt or powershell
-- Run:
-```sh
-npm i -g --add-python-to-path --vs2015 --production windows-build-tools
-```
+- Run: `npm i -g --add-python-to-path --vs2015 --production windows-build-tools`
 - Restart all open command prompts, powershell windows, and editors with a built-in console/prompt
 - Run `npm i better-sqlite3` in the console
 
 ### Mac
+
 - Install [XCode](https://developer.apple.com/xcode)
 - Once XCode is installed, go to Preferences, Downloads, and install the Command Line Tools.
 - Run `npm i better-sqlite3` in the console
 
 ### Linux
+
 - Install C++ build tools by running `sudo apt-get install build-essential`
 - Run `npm i better-sqlite3` in console
 
 ## Usage
+
 ```js
 // Some of the methods are not mentioned, refer to the documentation: endb.js.org
 const Database = require('endb');
@@ -61,6 +65,7 @@ db.destroy(); // -> undefined
 ```
 
 ## Links
+
 - [Documentation](https://endb.js.org)
 - [GitHub](https://github.com/chroventer/endb)
 - [NPM](https://npmjs.com/endb)
