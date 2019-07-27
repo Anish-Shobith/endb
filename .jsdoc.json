@@ -1,0 +1,51 @@
+{
+    "plugins": ["plugins/markdown", "plugins/summarize"],
+    "source": {
+        "include": ["./README.md", "./src"]
+    },
+    "sourceType": "module",
+    "tags": {
+        "allowUnknownTags": true
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    },
+    "opts": {
+        "template": "./node_modules/docdash",
+        "encoding": "utf8",
+        "destination": "./docs/",
+        "recurse": true
+    },
+    "docdash": {
+        "static": true,
+        "sort": true,
+        "openGraph": {
+            "title": "Endb",
+            "type": "website",
+            "site_name": "endb",
+            "url": "endb.js.org"
+        },
+        "meta": {
+            "title": "Endb",
+            "description": "A simplified & powerful key-value database wrapper for ease-of-use"
+        },
+        "search": true,
+        "collapse": true,
+        "wrap": true,
+        "menu": {
+            "GitHub": {
+                "href": "https://github.com/endb/endb",
+                "target": "_blank",
+                "class": "menu-item",
+                "id": "github-link"
+            },
+            "NPM": {
+                "href": "https://npmjs.com/package/endb",
+                "target": "_blank",
+                "class": "menu-item",
+                "id": "npm-link"
+            }
+        }
+    }
+}

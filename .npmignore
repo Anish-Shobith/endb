@@ -12,11 +12,10 @@ yarn-error.log*
 
 # Miscellaneous
 .tmp/
-.vscode/
 docs/
+.jsdoc.json
 .eslintrc.json
 .travis.yml
-src/
 
 # Git
 .github/

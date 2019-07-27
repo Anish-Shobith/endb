@@ -2,13 +2,12 @@
   "name": "endb",
   "version": "0.0.25",
   "description": "A simplified & powerful key-value database wrapper for ease-of-use",
-  "main": "lib/index.js",
-  "types": "lib",
+  "main": "src/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
-    "start": "npm run build:docs && npm run build",
-    "test": "npm run build && node lib/test",
-    "build": "tsc -p .",
-    "build:docs": "typedoc"
+    "start": "npm run build:docs",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:docs": "jsdoc -c .jsdoc.json"
   },
   "repository": {
     "type": "git",
@@ -27,12 +26,12 @@
     "url": "https://github.com/chroventer/endb/issues"
   },
   "homepage": "https://endb.js.org",
-  "devDependencies": {
-    "@types/better-sqlite3": "^5.4.0",
-    "@types/node": "^12.6.8",
-    "typescript": "^3.5.3"
-  },
   "dependencies": {
     "better-sqlite3": "^5.4.1"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.8",
+    "docdash": "^1.1.1",
+    "jsdoc": "^3.6.3"
   }
 }
