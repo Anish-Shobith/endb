@@ -34,7 +34,7 @@ There are a few existing modules similar to endb, however, endb is different bec
 ### Mac
 
 - Install [XCode](https://developer.apple.com/xcode)
-- Once XCode is installed, go to Preferences, Downloads, and install the Command Line Tools.
+- Once XCode is installed, go to Preferences, Downloads, and install the Command Line Tools
 - Run `npm i better-sqlite3` in the console
 
 ### Linux
@@ -47,7 +47,7 @@ There are a few existing modules similar to endb, however, endb is different bec
 ```js
 // Some of the methods are not mentioned, refer to the documentation: endb.js.org
 const Endb = require('endb');
-const db = new Endb.Database();
+const db = new Endb();
 
 db.set('account:foo', 'bar'); // -> { key: 'account_1234567890', value: 'bar' }
 db.set('account:foobar', {
@@ -56,12 +56,13 @@ db.set('account:foobar', {
   verified: false,
   checked: true
 }); // -> { key: 'account:foo', value: '{"id":1234567890,"password":"bar","verified":false,"checked":true}' }
-db.get('account:foo'); // -> password
-db.has('account:foobar'); // -> true
+
+const data = db.get('account:foo');
+console.log(data); // -> password
+
+if (db.has('account:foobar')) console.log('The element exists!');
+
 db.delete('account:foo'); // -> true
-db.getAll() // -> // -> [ { key: 'account:foobar', value: '{"id":1234567890,"password":"password",verfied:false,"checked":true}' } ]
-db.clear(); // -> undefined
-db.destroy(); // -> undefined
 ```
 
 ## Links
