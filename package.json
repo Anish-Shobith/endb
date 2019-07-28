@@ -1,6 +1,6 @@
 {
     "name": "endb",
-    "version": "0.0.26",
+    "version": "0.0.27",
     "description": "A simplified & powerful key-value database wrapper for ease-of-use",
     "main": "src/index.js",
     "types": "typings/index.d.ts",
