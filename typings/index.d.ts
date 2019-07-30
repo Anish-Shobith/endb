@@ -4,6 +4,7 @@ declare module 'endb' {
      * A simplified & powerful key-value database wrapper for ease-of-use
      */
     export class Endb {
+        constructor(options?: object);
         public readonly options: object;
         public readonly name: string;
         public readonly fileName: string;
@@ -16,9 +17,6 @@ declare module 'endb' {
         public readonly isReady: boolean;
         private ready: () => void;
         private _db: any;
-
-        constructor(options?: object);
-
         public readonly count: number;
         public readonly indexes: string[];
         public clear(): null;
