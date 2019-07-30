@@ -67,12 +67,36 @@ class Endb {
     }
 
     /**
+     * Gets the filename of the database
+     * @returns {string}
+     */
+    get fileName() {
+        return this.fileName;
+    }
+
+    /**
      * Gets all the indexes (keys) from the database
      * @returns {string[]} The indexes (keys) from the database
      */
     get indexes() {
         const data = this._db.prepare(`SELECT key FROM ${this.name};`).all();
         return data.map(row => row.key);
+    }
+
+    /**
+     * Gets the name of the table
+     * @returns {string}
+     */
+    get name() {
+        return this.name;
+    }
+
+    /**
+     * Gets the path of the database file
+     * @returns {string}
+     */
+    get path() {
+        return this.path;
     }
 
     /**
@@ -169,7 +193,7 @@ class Endb {
      */
     find(key) {
         this[check]();
-        if (prefix == null || !['String', 'Number'].includes(prefix.constructor.name)) {
+        if (key == null || !['String', 'Number'].includes(key.constructor.name)) {
             throw new EndbError('Prefix must be a string or number', 'ENDB_TYPE_ERROR');
         }
         const data = this._db.prepare(`SELECT * FROM ${this.name} WHERE key LIKE ?;`).all([`${key}%`]);
@@ -220,8 +244,9 @@ class Endb {
      * @returns {boolean} Whether or not, the element with the key exists in the database
      * @example
      * Endb.has('key');
-     * if (Endb.has('key')) {
-     *  // ...
+     * const data = Endb.has('profile');
+     * if (data) {
+     *   return console.log('Profile exists');
      * }
      */
     has(key) {
@@ -262,10 +287,10 @@ class Endb {
      * Endb.set('profile', {
      *   id: 1234567890,
      *   username: 'user',
-     *   description: 'a user',
+     *   description: 'A test user',
      *   verified: true
      * });
-     * Endb.set('keyArray', [ 'one', 'two', 3, 'four' ]);
+     * Endb.set('numbers', [ 'one', 'two', 3, 'four' ]);
      */
     set(key, value) {
         this[check]();

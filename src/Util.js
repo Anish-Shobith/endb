@@ -11,6 +11,13 @@ module.exports = {
         timeout: 5000,
         wal: true
     },
+    DataTypes: {
+        NULL: 'NULL',
+        INTEGER: 'INTEGER',
+        REAL: 'REAL',
+        TEXT: 'TEXT',
+        BLOB: 'BLOB'
+    },
     cloneObject: function(obj = {}) {
         return Object.assign(Object.create(obj), obj);
     },

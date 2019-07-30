@@ -44,3 +44,7 @@ jspm_packages/
 
 # dotenv environment variables file
 .env
+
+.jsdoc.json
+.npmignore
+.npmrc
