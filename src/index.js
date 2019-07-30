@@ -67,36 +67,12 @@ class Endb {
     }
 
     /**
-     * Gets the filename of the database
-     * @returns {string}
-     */
-    get fileName() {
-        return this.fileName;
-    }
-
-    /**
      * Gets all the indexes (keys) from the database
      * @returns {string[]} The indexes (keys) from the database
      */
     get indexes() {
         const data = this._db.prepare(`SELECT key FROM ${this.name};`).all();
         return data.map(row => row.key);
-    }
-
-    /**
-     * Gets the name of the table
-     * @returns {string}
-     */
-    get name() {
-        return this.name;
-    }
-
-    /**
-     * Gets the path of the database file
-     * @returns {string}
-     */
-    get path() {
-        return this.path;
     }
 
     /**

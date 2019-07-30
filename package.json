@@ -3,7 +3,7 @@
     "version": "0.0.27",
     "description": "A simplified & powerful key-value database wrapper for ease-of-use",
     "main": "src/index.js",
-    "types": "typings",
+    "types": "typings/index.d.ts",
     "scripts": {
         "start": "npm run build:docs",
         "test": "echo \"Error: no test specified\" && exit 1",
