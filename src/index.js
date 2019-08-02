@@ -10,6 +10,7 @@ const { DataTypes } = require('./Util');
 class Endb {
 
     constructor(options = {}) {
+        this.options = options;
     }
 
     static define(name, schema = {}, options = {}) {
