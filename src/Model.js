@@ -1,28 +1,31 @@
 'use strict';
 
 const SQLite = require('better-sqlite3');
-const { existsSync, mkdirSync } = require('fs');
-const { resolve, sep } = require('path');
-const { EndbError: Error } = require('./EndbError');
-const { DataTypes, where, arrayify, mergeUpdate } = require('./Util');
+const fs = require('fs');
+const path = require('path');
+const Error = require('./EndbError');
+const Util = require('./Util');
 const init = Symbol('init');
 const check = Symbol('check');
 
+/**
+ * Represents a table in the database
+ */
 class Model {
     constructor(schema, options = {}) {
         this.schema = schema;
         this.options = options;
         this.name = options.name;
         this.fileName = typeof options.fileName === 'string' ? options.fileName.replace(/[^a-z0-9]/gi, '_') : 'endb';
-        this.path = typeof options.path === 'string' ? resolve(process.cwd(), options.path) : resolve(process.cwd(), './');
+        this.path = typeof options.path === 'string' ? path.resolve(process.cwd(), options.path) : path.resolve(process.cwd(), './');
         this.fileMustExist = typeof options.fileMustExist === 'boolean' ? Boolean(options.fileMustExist) : false;
         this.timeout = typeof options.timeout === 'number' ? Number(options.timeout) : 5000;
         this.wal = typeof options.wal === 'boolean' ? Boolean(options.wal) : true;
-        if (!existsSync(this.path)) mkdirSync(this.path);
+        if (!fs.existsSync(this.path)) fs.mkdirSync(this.path);
         if (this.fileMustExist === true && !existsSync(this.fileName)) {
             throw new Error(`${this.fileName} does not exist in the directory`);
         }
-        this._db = new SQLite(`${this.path}${sep}${this.fileName}.db`, {
+        this._db = new SQLite(`${this.path}${path.sep}${this.fileName}.db`, {
             fileMustExist: this.fileMustExist,
             timeout: this.timeout
         });
@@ -32,7 +35,7 @@ class Model {
     }
 
     /**
-     * Gets the number of rows in the database
+     * Gets the number of documents in the database
      * @returns {number} The number of rows in the database
      */
     get count() {
@@ -53,30 +56,58 @@ class Model {
         return undefined;
     }
 
+    /**
+     * Deletes the document that matches conditions from the model
+     * @param {Object} [conditions] Filter the delete
+     * @returns {Model}
+     */
     delete(conditions = {}) {
         this[check]();
-        const stmt = this._db.prepare(`DELETE FROM \`${this.name}\` ${where(conditions)}`);
-        return conditions ? stmt.run(conditions) : stmt.run();
+        const stmt = this._db.prepare(`DELETE FROM \`${this.name}\` ${Util.where(conditions)}`);
+        if (conditions) {
+            stmt.run(conditions);
+        } else {
+            stmt.run();
+        }
+        return this;
     }
 
-    deleteModel() {
-        this._db.prepare(`DROP TABLE \`${this.name}\``);
+    /**
+     * Deletes the model from the database
+     * @returns {void}
+     */
+    deleteModel(name = this.name) {
+        this._db.prepare(`DROP TABLE \`${name}\``);
         return undefined;
     }
 
+    /**
+     * Deletes all documents from the model
+     * @returns {Model}
+     */
     deleteAll() {
         this[check]();
         this._db.prepare(`DELETE FROM ${this.name};`).run();
-        return undefined;
+        return this;
     }
 
-    find(filter = {}) {
+    /**
+     * Finds a document taking filter into account
+     * @param {Object} [where] Value(s) of document to find. If where object is not supplied, all documents are returned
+     * @returns {any[]}
+     */
+    find(where = {}) {
         this[check]();
-        const columns = arrayify(Object.keys(this.schema)).sort();
-        const stmt = this._db.prepare(`SELECT ${columns.join(', ')} FROM ${this.name} ${where(filter)};`);
-        return filter ? stmt.all(filter) : stmt.all();
+        const columns = Util.arrayify(Object.keys(this.schema)).sort();
+        const stmt = this._db.prepare(`SELECT ${columns.join(', ')} FROM ${this.name} ${Util.where(where)};`);
+        return filter ? stmt.all(where) : stmt.all();
     }
 
+    /**
+     * Inserts a document to the model
+     * @param {Object} doc The document to insert to the model
+     * @returns {Object}
+     */
     insert(doc = {}) {
         this[check]();
         const columns = Object.keys(this.schema);
@@ -86,10 +117,16 @@ class Model {
         return doc;
     }
 
+    /**
+     * Updates a document values by finding the values
+     * @param {Object} [where] Value(s) of document to find
+     * @param {*} clause The update
+     * @returns {Object}
+     */
     update(filter, clause) {
         this[check]();
         const values = Object.keys(filter).map(k => (`${k} = @value_${k}`)).join(', ');
-        this._db.prepare(`UPDATE OR REPLACE \`${this.name}\` SET ${values} ${where(clause, 'clause_')}`).run(mergeUpdate(filter, clause));
+        this._db.prepare(`UPDATE OR REPLACE \`${this.name}\` SET ${values} ${Util.where(clause, 'clause_')}`).run(Util.mergeUpdate(filter, clause));
         return { filter, clause };
     }
 
@@ -115,6 +152,7 @@ class Model {
     }
 }
 
-module.exports.Model = Model;
+module.exports = Model;
 module.exports.Error = Error;
-module.exports.Types = DataTypes;
+module.exports.Util = Util;
+module.exports.Types = Util.DataTypes;

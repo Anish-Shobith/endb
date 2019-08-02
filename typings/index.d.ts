@@ -1,11 +1,5 @@
-// !OUTDATED!
-// Requires Update
-
 declare module 'endb' {
 
-    /**
-     * A simplified & powerful key-value database wrapper for ease-of-use
-     */
     export class Endb {
         constructor(options?: object);
         public readonly options: object;

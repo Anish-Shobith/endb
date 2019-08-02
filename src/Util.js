@@ -11,7 +11,7 @@ module.exports = {
         NULL: 'NULL',
         NUMBER: 'INT(11)',
         REAL: 'REAL',
-        STRING: `VARCHAR(255)`,
+        STRING: 'VARCHAR(255)',
         TEXT: 'TEXT'
     },
     cloneObject: function(obj = {}) {

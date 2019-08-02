@@ -1,11 +1,11 @@
 'use strict';
 
 const { EndbError: Error } = require('./EndbError');
-const { Model } = require('./Model');
-const { DataTypes } = require('./Util');
+const Model = require('./Model');
+const Util = require('./Util');
 
 /**
- * A simple SQLite3 ORM (Object-Relational Mapping) for Node.js
+ * The main class and the entry point to endb
  */
 class Endb {
 
@@ -60,4 +60,6 @@ class Endb {
 
 module.exports = Endb;
 module.exports.Error = Error;
-module.exports.Types = DataTypes;
+module.exports.Model = Model;
+module.exports.Util = Util;
+module.exports.Types = Util.DataTypes;
