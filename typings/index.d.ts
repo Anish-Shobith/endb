@@ -1,3 +1,6 @@
+// !OUTDATED!
+// Requires Update
+
 declare module 'endb' {
 
     /**

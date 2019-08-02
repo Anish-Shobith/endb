@@ -9,15 +9,7 @@
 
 ## About
 
-A simplified & powerful key-value database wrapper for ease-of-use
-
-There are a few existing modules similar to endb, however, endb is different because it:
-
-- Has a simple Promise-based API
-- Is easily embeddable inside another module
-- Can handle all SQLite types
-- Is persistent, highly configurable, and user-friendly
-- Supports the current active LTS version of Node.js or higher
+A simple SQLite3 ORM (Object-Relational Mapping) for Node.js
 
 ## Installation
 
@@ -46,23 +38,35 @@ There are a few existing modules similar to endb, however, endb is different bec
 
 ```js
 // Some of the methods are not mentioned, refer to the documentation: endb.js.org
-const Endb = require('endb');
-const db = new Endb();
+const endb = require('endb');
+// Endb#define(name, schema);
+const User = endb.define('User', {
+  id: endb.Types.NUMBER,
+  username: endb.Types.STRING,
+  description: endb.Types.TEXT,
+  created: endb.Types.DATE,
+  done: endb.Types.NULL
+});
 
-db.set('account:foo', 'bar'); // -> { key: 'account_1234567890', value: 'bar' }
-db.set('account:foobar', {
-  id: 1234567890,
-  password: 'bar',
-  verified: false,
-  checked: true
-}); // -> { key: 'account:foo', value: '{"id":1234567890,"password":"bar","verified":false,"checked":true}' }
+// Model#insert(doc);
+User.insert({
+  id: 123456789,
+  username: 'testuser',
+  description: 'a test user',
+  created: Date.now(),
+  done: null
+});
 
-const data = db.get('account:foo');
-console.log(data); // -> password
+// Model#find(filter);
+User.find({ id: 123456789, description: 'a test user' });
 
-if (db.has('account:foobar')) console.log('The element exists!');
+// Model#update(filter, clause);
+User.update({ id: 123456789 }, { description: 'test user' });
 
-db.delete('account:foo'); // -> true
+// Model#delete(conditions);
+User.delete({ username: 'testuser' });
+
+User.close();
 ```
 
 ## Links
@@ -70,3 +74,4 @@ db.delete('account:foo'); // -> true
 - [Documentation](https://endb.js.org)
 - [GitHub](https://github.com/chroventer/endb)
 - [NPM](https://npmjs.com/endb)
+- [What is ORM?](https://wikipedia.org/wiki/Object-relational_mapping)

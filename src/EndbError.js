@@ -9,4 +9,4 @@ class EndbError extends Error {
     }
 }
 
-module.exports = EndbError;
+module.exports.EndbError = EndbError;

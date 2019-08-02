@@ -1,22 +1,18 @@
 'use strict';
 
-const { EndbError } = require('./EndbError');
-
 module.exports = {
-    Options: {
-        name: 'endb',
-        fileName: 'endb',
-        path: './',
-        fileMustExist: false,
-        timeout: 5000,
-        wal: true
-    },
     DataTypes: {
-        NULL: 'NULL',
+        BLOB: 'BLOB',
+        BOOLEAN: 'TINYINT(1)',
+        DATE: 'DATETIME',
+        ENUM: 'TEXT',
+        FLOAT: 'FLOAT',
         INTEGER: 'INTEGER',
+        NULL: 'NULL',
+        NUMBER: 'INT(11)',
         REAL: 'REAL',
-        TEXT: 'TEXT',
-        BLOB: 'BLOB'
+        STRING: `VARCHAR(255)`,
+        TEXT: 'TEXT'
     },
     cloneObject: function(obj = {}) {
         return Object.assign(Object.create(obj), obj);
@@ -32,24 +28,26 @@ module.exports = {
         }
         return given;
     },
-    validateOptions: function(options = this.Options) {
-        if (typeof options.name !== 'string') {
-            throw new EndbError('The option "name" must be a string', 'ENDB_INVALID_OPTION');
+    isNumeric: function(num) {
+        return !isNaN(parseFloat(num)) && isFinite(num);
+    },
+    entries: function*(obj) {
+        for (let key of Object.keys(obj)) {
+            yield [key, obj[key]];
         }
-        if (typeof options.fileName !== 'string') {
-            throw new EndbError('The option "fileName" must be a string', 'ENDB_INVALID_OPTION');
-        }
-        if (typeof options.path !== 'string') {
-            throw new EndbError('The option "path" must be a string', 'ENDB_INVALID_OPTION');
-        }
-        if (typeof options.fileMustExist !== 'boolean') {
-            throw new EndbError('The option "fileMustExist" must be a boolean', 'ENDB_INVALID_OPTION');
-        }
-        if (typeof options.timeout !== 'number') {
-            throw new EndbError('The option "timeout" must be a number', 'ENDB_INVALID_OPTION');
-        }
-        if (typeof options.wal !== 'boolean') {
-            throw new EndbError('The option "wal" must be a boolean', 'ENDB_INVALID_OPTION');
-        }
+    },
+    where: function(properties = {}, prefix) {
+        const names = Object.keys(properties).filter(k => k[0] !== '_');
+        if (names.length === 0) return '';
+        return `WHERE ${names.map(name => (`${name} = @${prefix||''}${name}`)).join(' AND ')}`;
+    },
+    arrayify: function(array) {
+        return Array.isArray(array) ? array : [array];
+    },
+    mergeUpdate: function(properties, clause) {
+        const out = {};
+        Object.keys(properties).forEach(name => out['value_' + name] = properties[name]);
+        Object.keys(clause).forEach(name => out['clause_' + name] = clause[name]);
+        return out;
     }
 };

@@ -1,7 +1,7 @@
 {
     "name": "endb",
     "version": "0.0.28",
-    "description": "A simplified & powerful key-value database wrapper for ease-of-use",
+    "description": "A simple SQLite3 ORM (Object-Relational Mapping) for Node.js",
     "main": "src/index.js",
     "types": "typings/index.d.ts",
     "scripts": {
@@ -14,11 +14,11 @@
         "url": "git+https://github.com/chroventer/endb.git"
     },
     "keywords": [
+        "endb",
+        "javascript",
+        "orm",
         "db",
-        "database",
-        "sqlite",
-        "sqlite3",
-        "store"
+        "sqlite"
     ],
     "author": "chroventer <chroventer@gmail.com> (https://github.com/chroventer)",
     "license": "MIT",
