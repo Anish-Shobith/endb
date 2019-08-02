@@ -77,7 +77,7 @@ class Model {
      * @returns {void}
      */
     deleteModel(name = this.name) {
-        this._db.prepare(`DROP TABLE \`${name}\``);
+        this._db.prepare(`DROP TABLE \`${name}\``).run();
         return undefined;
     }
 
