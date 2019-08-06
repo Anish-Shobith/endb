@@ -22,12 +22,13 @@ class Endb {
      * @param {Object} schema The attributes of the model
      * @param {Object} [options] The options for the function
      */
-    static define(name, schema = {}, options = {}) {
+    static model(name, schema = {}, options = {}) {
         if (typeof name !== 'string' || typeof name === 'undefined') {
             throw new Error('Name must be a string', 'EndbTypeError');
         }
         options.endb = this;
-        options.name = typeof name === 'string' ? name.replace(/[^a-z0-9]/gi, '_') : 'endb'; 
+        options.name = name.replace(/[^a-z0-9]/gi, '_');
+        options.schema = schema;
         options.columns = Object.keys(schema).map(col => (`\`${col}\` ${schema[col]}`));
         const model = new Model(schema, options);
         this.models = [];

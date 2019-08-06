@@ -1,5 +1,4 @@
 declare module 'endb' {
-
     export class Endb {
         constructor(options?: object);
         public readonly options: object;

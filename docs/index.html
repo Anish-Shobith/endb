@@ -38,7 +38,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/endb/endb" target="_blank" class="menu-item" id="github-link" >GitHub</a></h2><h2><a href="https://npmjs.com/package/endb" target="_blank" class="menu-item" id="npm-link" >NPM</a></h2><h3>Classes</h3><ul><li><a href="Endb.html">Endb</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Endb.html#.define">define</a></li></ul></li><li><a href="Model.html">Model</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Model.html#close">close</a></li><li data-type='method' style='display: none;'><a href="Model.html#delete">delete</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteAll">deleteAll</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteModel">deleteModel</a></li><li data-type='method' style='display: none;'><a href="Model.html#find">find</a></li><li data-type='method' style='display: none;'><a href="Model.html#insert">insert</a></li><li data-type='method' style='display: none;'><a href="Model.html#update">update</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/endb/endb" target="_blank" class="menu-item" id="github-link" >GitHub</a></h2><h2><a href="https://npmjs.com/package/endb" target="_blank" class="menu-item" id="npm-link" >NPM</a></h2><h3>Classes</h3><ul><li><a href="Endb.html">Endb</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Endb.html#.model">model</a></li></ul></li><li><a href="Model.html">Model</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Model.html#close">close</a></li><li data-type='method' style='display: none;'><a href="Model.html#delete">delete</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteAll">deleteAll</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteModel">deleteModel</a></li><li data-type='method' style='display: none;'><a href="Model.html#find">find</a></li><li data-type='method' style='display: none;'><a href="Model.html#insert">insert</a></li><li data-type='method' style='display: none;'><a href="Model.html#loadExtension">loadExtension</a></li><li data-type='method' style='display: none;'><a href="Model.html#update">update</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -72,11 +72,17 @@
 <p>
   <a href="https://www.npmjs.com/package/endb"><img src="https://img.shields.io/npm/v/endb.svg" alt="npm-version" /></a>
   <a href="https://www.npmjs.com/package/endb"><img src="https://img.shields.io/npm/dt/endb.svg" alt="npm-downloads" /></a>
-  <a href="https://david-dm.org/chroventer/endb"><img src="https://img.shields.io/david/chroventer/endb.svg" alt="dependencies" /></a>
-  <a href="https://github.com/chroventer/endb/stargazers"><img src="https://img.shields.io/github/stars/chroventer/endb.svg?style=social&label=Star"></a>
+  <a href="https://david-dm.org/endb/endb"><img src="https://img.shields.io/david/endb/endb.svg" alt="dependencies" /></a>
+  <a href="https://github.com/endb/endb/stargazers"><img src="https://img.shields.io/github/stars/endb/endb.svg?style=social&label=Star"></a>
 </p>
 <h2>About</h2>
-<p>A simple SQLite3 ORM (Object-Relational Mapping) for Node.js</p>
+<p>Endb is a easy-to-use SQLite3 ORM (Object-Relational Mapping) for Node.js
+New to Endb? Check out the <a href="https://endb.js.org">API Reference</a></p>
+<ul>
+<li>Full transaction support</li>
+<li>High performance, efficiency, and safety</li>
+<li>Easy-to-use synchronous API (faster than an asynchronous API)</li>
+</ul>
 <h2>Installation</h2>
 <blockquote>
 <p>Node.js 10.0 or newer is required.
@@ -101,18 +107,19 @@ If installation-error persists, check out the <a href="https://github.com/Joshua
 <li>Run <code>npm i better-sqlite3</code> in console</li>
 </ul>
 <h2>Usage</h2>
-<pre class="prettyprint source lang-js"><code>// Some of the methods are not mentioned, refer to the documentation: endb.js.org
+<pre class="prettyprint source lang-js"><code>// /models/User.js:
 const endb = require('endb');
-// Endb#define(name, schema);
-const User = endb.define('User', {
+module.exports = endb.model('User', {
   id: endb.Types.NUMBER,
   username: endb.Types.STRING,
   description: endb.Types.TEXT,
   created: endb.Types.DATE,
   done: endb.Types.NULL
 });
+</code></pre>
+<pre class="prettyprint source lang-js"><code>// /index.js:
+const User = require('/models/User');
 
-// Model#insert(doc);
 User.insert({
   id: 123456789,
   username: 'testuser',
@@ -121,13 +128,10 @@ User.insert({
   done: null
 });
 
-// Model#find(filter);
 User.find({ id: 123456789, description: 'a test user' });
 
-// Model#update(filter, clause);
 User.update({ id: 123456789 }, { description: 'test user' });
 
-// Model#delete(conditions);
 User.delete({ username: 'testuser' });
 
 User.close();
@@ -135,8 +139,9 @@ User.close();
 <h2>Links</h2>
 <ul>
 <li><a href="https://endb.js.org">Documentation</a></li>
-<li><a href="https://github.com/chroventer/endb">GitHub</a></li>
+<li><a href="https://github.com/endb/endb">GitHub</a></li>
 <li><a href="https://npmjs.com/endb">NPM</a></li>
+<li><a href="https://github.com/JoshuaWise/better-sqlite3">better-sqlite3</a></li>
 <li><a href="https://wikipedia.org/wiki/Object-relational_mapping">What is ORM?</a></li>
 </ul></article>
     </section>
@@ -153,7 +158,7 @@ User.close();
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Aug 02 2019 22:09:14 GMT+0400 (Gulf Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Tue Aug 06 2019 22:23:35 GMT+0400 (Gulf Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

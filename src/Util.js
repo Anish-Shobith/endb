@@ -14,6 +14,7 @@ module.exports = {
         STRING: 'VARCHAR(255)',
         TEXT: 'TEXT'
     },
+    extension: '.db',
     cloneObject: function(obj = {}) {
         return Object.assign(Object.create(obj), obj);
     },

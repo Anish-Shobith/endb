@@ -1,7 +1,7 @@
 {
     "name": "endb",
     "version": "0.10.0",
-    "description": "A simple SQLite3 ORM (Object-Relational Mapping) for Node.js",
+    "description": "Endb is a easy-to-use SQLite3 ORM (Object-Relational Mapping) for Node.js",
     "main": "src/index.js",
     "types": "typings/index.d.ts",
     "scripts": {
@@ -11,7 +11,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/chroventer/endb.git"
+        "url": "git+https://github.com/endb/endb.git"
     },
     "keywords": [
         "endb",
@@ -20,10 +20,10 @@
         "db",
         "sqlite"
     ],
-    "author": "chroventer <chroventer@gmail.com> (https://github.com/chroventer)",
+    "author": "endb <chroventer@gmail.com> (https://github.com/endb)",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/chroventer/endb/issues"
+        "url": "https://github.com/endb/endb/issues"
     },
     "homepage": "https://endb.js.org",
     "dependencies": {

@@ -16,16 +16,16 @@ class Model {
         this.schema = schema;
         this.options = options;
         this.name = options.name;
-        this.fileName = typeof options.fileName === 'string' ? options.fileName.replace(/[^a-z0-9]/gi, '_') : 'endb';
-        this.path = typeof options.path === 'string' ? path.resolve(process.cwd(), options.path) : path.resolve(process.cwd(), './');
-        this.fileMustExist = typeof options.fileMustExist === 'boolean' ? Boolean(options.fileMustExist) : false;
-        this.timeout = typeof options.timeout === 'number' ? Number(options.timeout) : 5000;
-        this.wal = typeof options.wal === 'boolean' ? Boolean(options.wal) : true;
+        this.fileName = options.fileName.replace(/[^a-z0-9]/gi, '_') || 'endb';
+        this.path = path.resolve(process.cwd(), options.path) || path.resolve(process.cwd(), './');
+        this.fileMustExist = Boolean(options.fileMustExist) || false;
+        this.timeout = Number(options.timeout) || 5000;
+        this.wal = Boolean(options.wal) || true;
         if (!fs.existsSync(this.path)) fs.mkdirSync(this.path);
         if (this.fileMustExist === true && !existsSync(this.fileName)) {
             throw new Error(`${this.fileName} does not exist in the directory`);
         }
-        this._db = new SQLite(`${this.path}${path.sep}${this.fileName}.db`, {
+        this._db = new SQLite(`${this.path}${path.sep}${this.fileName}${Util.extension}`, {
             fileMustExist: this.fileMustExist,
             timeout: this.timeout
         });
@@ -113,8 +113,16 @@ class Model {
         const columns = Object.keys(this.schema);
         const names = columns.join(', ');
         const values = columns.map(col => `@${col}`).join(', ');
-        this._db.prepare(`INSERT INTO \`${this.name}\` (${names}) VALUES (${values});`).run(doc);
+        this._db.prepare(`INSERT INTO ${this.name} (${names}) VALUES(${values});`).run(doc);
         return doc;
+    }
+
+    /**
+     * Loads a compiled SQLite3 extension and applies it to the current database connection
+     * @param {string} path
+     */
+    loadExtension(path) {
+        return this._db.loadExtension(path.resolve(process.cwd(), path));
     }
 
     /**
@@ -126,7 +134,7 @@ class Model {
     update(filter, clause) {
         this[check]();
         const values = Object.keys(filter).map(k => (`${k} = @value_${k}`)).join(', ');
-        this._db.prepare(`UPDATE OR REPLACE \`${this.name}\` SET ${values} ${Util.where(clause, 'clause_')}`).run(Util.mergeUpdate(filter, clause));
+        this._db.prepare(`UPDATE OR REPLACE ${this.name} SET ${values} ${Util.where(clause, 'clause_')}`).run(Util.mergeUpdate(filter, clause));
         return { filter, clause };
     }
 
@@ -138,7 +146,7 @@ class Model {
         }
         const table = db.prepare(`SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = ?;`).get(this.name);
         if (!table['count(*)']) {
-            db.prepare(`CREATE TABLE IF NOT EXISTS \`${this.name}\` (${this.options.columns});`).run();
+            db.prepare(`CREATE TABLE IF NOT EXISTS ${this.name}(${this.options.columns});`).run();
             db.pragma('synchronous = 1');
             if (this.wal) db.pragma('journal_mode = wal');
         }
