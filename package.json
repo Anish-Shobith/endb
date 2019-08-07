@@ -14,11 +14,11 @@
         "url": "git+https://github.com/endb/endb.git"
     },
     "keywords": [
-        "endb",
-        "javascript",
-        "orm",
-        "db",
-        "sqlite"
+        "sql",
+        "sqlite",
+        "sqlite3",
+        "database",
+        "orm"
     ],
     "author": "endb <chroventer@gmail.com> (https://github.com/endb)",
     "license": "MIT",

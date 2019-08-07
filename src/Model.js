@@ -44,8 +44,8 @@ class Model {
     }
 
     /**
-     * Shuts down the database connection
-     * WARNING: USING THE METHOD MAKES THE DATABASE UNWORKABLE
+     * Closes the database connection
+     * @method Model#close
      * @returns {undefined}
      * @example
      * Model.close().then(console.log).catch(console.error);
@@ -58,12 +58,17 @@ class Model {
 
     /**
      * Deletes the document that matches conditions from the model
+     * @method Model#delete
      * @param {Object} [conditions] Filter the delete
      * @returns {Model}
      */
     delete(conditions = {}) {
         this[check]();
-        const stmt = this._db.prepare(`DELETE FROM \`${this.name}\` ${Util.where(conditions)}`);
+        const query = [
+            `DELETE FROM \`${this.name}\``,
+            Util.where(conditions)
+        ].filter(array => !!array).join(' ');
+        const stmt = this._db.prepare(query);
         if (conditions) {
             stmt.run(conditions);
         } else {
@@ -74,37 +79,48 @@ class Model {
 
     /**
      * Deletes the model from the database
+     * @method Model#deleteModel
      * @returns {void}
      */
-    deleteModel(name = this.name) {
-        this._db.prepare(`DROP TABLE \`${name}\``).run();
+    deleteModel() {
+        delete this.options.endb.models[this.name];
+        this._db.prepare(`DROP TABLE \`${this.name}\`;`).run();
         return undefined;
     }
 
     /**
      * Deletes all documents from the model
+     * @method Model#deleteAll
      * @returns {Model}
      */
     deleteAll() {
         this[check]();
-        this._db.prepare(`DELETE FROM ${this.name};`).run();
+        this._db.prepare(`DELETE FROM \`${this.name}\`;`).run();
         return this;
     }
 
     /**
      * Finds a document taking filter into account
+     * @method Model#find
      * @param {Object} [where] Value(s) of document to find. If where object is not supplied, all documents are returned
      * @returns {any[]}
      */
     find(where = {}) {
         this[check]();
         const columns = Util.arrayify(Object.keys(this.schema)).sort();
-        const stmt = this._db.prepare(`SELECT ${columns.join(', ')} FROM ${this.name} ${Util.where(where)};`);
+        const query = [
+            `SELECT ${columns.join(', ')} FROM ${this.name}`,
+            Util.where(where),
+            Util.order(where),
+            Util.limit(where)
+        ].filter(array => !!array).join(' ');
+        const stmt = this._db.prepare(query);
         return filter ? stmt.all(where) : stmt.all();
     }
 
     /**
      * Inserts a document to the model
+     * @method Model#insert
      * @param {Object} doc The document to insert to the model
      * @returns {Object}
      */
@@ -119,6 +135,7 @@ class Model {
 
     /**
      * Loads a compiled SQLite3 extension and applies it to the current database connection
+     * @method Model#loadExtension
      * @param {string} path
      */
     loadExtension(path) {
@@ -127,6 +144,7 @@ class Model {
 
     /**
      * Updates a document values by finding the values
+     * @method Model#update
      * @param {Object} [where] Value(s) of document to find
      * @param {*} clause The update
      * @returns {Object}
@@ -146,7 +164,7 @@ class Model {
         }
         const table = db.prepare(`SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = ?;`).get(this.name);
         if (!table['count(*)']) {
-            db.prepare(`CREATE TABLE IF NOT EXISTS ${this.name}(${this.options.columns});`).run();
+            db.prepare(`CREATE TABLE IF NOT EXISTS \`${this.name}\` (${this.options.columns});`).run();
             db.pragma('synchronous = 1');
             if (this.wal) db.pragma('journal_mode = wal');
         }
