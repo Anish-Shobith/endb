@@ -24,9 +24,7 @@ class Endb {
      * @returns {Model}
      */
     static model(name, schema = {}, options = {}) {
-        if (typeof name !== 'string' || typeof name === 'undefined') {
-            throw new Error('Name must be a string', 'EndbTypeError');
-        }
+        if (typeof name !== 'string') throw new Error('Name must be a string', 'EndbTypeError');
         options.endb = this;
         options.name = name.replace(/[^a-z0-9]/gi, '_');
         options.schema = schema;

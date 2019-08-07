@@ -9,6 +9,8 @@ const init = Symbol('init');
 const check = Symbol('check');
 
 /**
+ * @class Model
+ * @classdesc
  * Represents a table in the database
  */
 class Model {
@@ -16,11 +18,11 @@ class Model {
         this.schema = schema;
         this.options = options;
         this.name = options.name;
-        this.fileName = options.fileName.replace(/[^a-z0-9]/gi, '_') || 'endb';
-        this.path = path.resolve(process.cwd(), options.path) || path.resolve(process.cwd(), './');
-        this.fileMustExist = Boolean(options.fileMustExist) || false;
-        this.timeout = Number(options.timeout) || 5000;
-        this.wal = Boolean(options.wal) || true;
+        this.fileName = options.fileName ? options.fileName.replace(/[^a-z0-9]/gi, '_') : 'endb';
+        this.path = options.path ? path.resolve(process.cwd(), options.path) : path.resolve(process.cwd(), './');
+        this.fileMustExist = options.fileMustExist ? Boolean(options.fileMustExist) : false;
+        this.timeout = options.timeout ? Number(options.timeout) : 5000;
+        this.wal = options.wal ? Boolean(options.wal) : true;
         if (!fs.existsSync(this.path)) fs.mkdirSync(this.path);
         if (this.fileMustExist === true && !existsSync(this.fileName)) {
             throw new Error(`${this.fileName} does not exist in the directory`);
@@ -39,7 +41,8 @@ class Model {
      * @returns {number} The number of rows in the database
      */
     get count() {
-        const data = this._db.prepare(`SELECT count(*) FROM ${this.name};`).get();
+        this[check]();
+        const data = this._db.prepare(`SELECT count(*) FROM \`${this.name}\`;`).get();
         return data['count(*)'];
     }
 
@@ -100,6 +103,16 @@ class Model {
     }
 
     /**
+     * 
+     * @param {*} id 
+     */
+    has(id) {
+        this[check]();
+        const data = this._db.prepare(`SELECT 1 FROM \`${this.name}\` WHERE _id = @${id} LIMIT 1`).run();
+        return data ? true : false;
+    }
+
+    /**
      * Finds a document taking filter into account
      * @method Model#find
      * @param {Object} [where] Value(s) of document to find. If where object is not supplied, all documents are returned
@@ -109,13 +122,13 @@ class Model {
         this[check]();
         const columns = Util.arrayify(Object.keys(this.schema)).sort();
         const query = [
-            `SELECT ${columns.join(', ')} FROM ${this.name}`,
+            `SELECT ${columns.join(', ')} FROM \`${this.name}\``,
             Util.where(where),
             Util.order(where),
             Util.limit(where)
         ].filter(array => !!array).join(' ');
         const stmt = this._db.prepare(query);
-        return filter ? stmt.all(where) : stmt.all();
+        return where ? stmt.all(where) : stmt.all();
     }
 
     /**
@@ -152,8 +165,12 @@ class Model {
     update(filter, clause) {
         this[check]();
         const values = Object.keys(filter).map(k => (`${k} = @value_${k}`)).join(', ');
-        this._db.prepare(`UPDATE OR REPLACE ${this.name} SET ${values} ${Util.where(clause, 'clause_')}`).run(Util.mergeUpdate(filter, clause));
-        return { filter, clause };
+        const query = [
+            `UPDATE OR REPLACE \`${this.name}\` SET ${values}`,
+            Util.where(clause, 'clause_')
+        ].filter(array => !!array).join(' ');
+        this._db.prepare(query).run(Util.mergeUpdate(filter, clause));
+        return { ...clause };
     }
 
     async [init](db = this._db) {
