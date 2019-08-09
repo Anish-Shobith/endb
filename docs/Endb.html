@@ -38,7 +38,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/endb/endb" target="_blank" class="menu-item" id="github-link" >GitHub</a></h2><h2><a href="https://npmjs.com/package/endb" target="_blank" class="menu-item" id="npm-link" >NPM</a></h2><h3>Classes</h3><ul><li><a href="Endb.html">Endb</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Endb.html#.model">model</a></li></ul></li><li><a href="Model.html">Model</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Model.html#close">close</a></li><li data-type='method' style='display: none;'><a href="Model.html#delete">delete</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteAll">deleteAll</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteModel">deleteModel</a></li><li data-type='method' style='display: none;'><a href="Model.html#find">find</a></li><li data-type='method' style='display: none;'><a href="Model.html#insert">insert</a></li><li data-type='method' style='display: none;'><a href="Model.html#loadExtension">loadExtension</a></li><li data-type='method' style='display: none;'><a href="Model.html#update">update</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/endb/endb" target="_blank" class="menu-item" id="github-link" >GitHub</a></h2><h2><a href="https://npmjs.com/package/endb" target="_blank" class="menu-item" id="npm-link" >NPM</a></h2><h3>Classes</h3><ul><li><a href="Endb.html">Endb</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Endb.html#model">model</a></li><li data-type='method' style='display: none;'><a href="Endb.html#models">models</a></li></ul></li><li><a href="Model.html">Model</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Model.html#backup">backup</a></li><li data-type='method' style='display: none;'><a href="Model.html#close">close</a></li><li data-type='method' style='display: none;'><a href="Model.html#delete">delete</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteAll">deleteAll</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteModel">deleteModel</a></li><li data-type='method' style='display: none;'><a href="Model.html#find">find</a></li><li data-type='method' style='display: none;'><a href="Model.html#has">has</a></li><li data-type='method' style='display: none;'><a href="Model.html#insert">insert</a></li><li data-type='method' style='display: none;'><a href="Model.html#loadExtension">loadExtension</a></li><li data-type='method' style='display: none;'><a href="Model.html#update">update</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -59,7 +59,7 @@
         Endb
         </h2>
         
-            <div class="class-description"><p>The main class and the entry point to endb</p></div>
+            <div class="class-description"><p>The database and main class</p></div>
         
     
 </header>
@@ -86,7 +86,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line11">line 11</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line6">line 6</a>
     </li></ul></dd>
     
 
@@ -169,6 +169,85 @@
     
 
     
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="options"><span class="type-signature"></span>options<span class="type-signature"> :Object</span></h4>
+
+
+<p class="summary"><p>The options of the database</p>.</p>
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line18">line 18</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>The options of the database</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+
+        
+    
 
     
         <h3 class="subsection-title">Methods</h3>
@@ -178,7 +257,7 @@
 
     
 
-    <h4 class="name" id=".model"><span class="type-signature">(static) </span>model<span class="signature">(name, schema, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
+    <h4 class="name" id="model"><span class="type-signature"></span>model<span class="signature">(name, schema, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Model.html">Model</a>}</span></h4>
 
     
     <p class="summary"><p>Creates a new model, representing a table in the database</p>.</p>
@@ -192,7 +271,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line26">line 26</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line21">line 21</a>
     </li></ul></dd>
     
 
@@ -241,6 +320,11 @@
 
 
 
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>const Model = Endb.model('Model', {    id: Endb.Types.NUMBER,    username: Endb.Types.STRING,    verified: Endb.Types.BOOLEAN});Model.insert({   id: 123456789,   username: 'username',   verified: true});</code></pre>
 
 
 
@@ -404,6 +488,113 @@
 
 
         
+            
+
+    
+
+    <h4 class="name" id="models"><span class="type-signature"></span>models<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+    <p class="summary"><p>Gets all the models associated with the database</p>.</p>
+    
+
+
+
+
+<dl class="details">
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+<div class="description">
+    <p>Gets all the models associated with the database</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+        
     
 
     
@@ -423,7 +614,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Aug 07 2019 16:07:52 GMT+0400 (Gulf Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Aug 09 2019 17:32:22 GMT+0400 (Gulf Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

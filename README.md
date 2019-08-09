@@ -12,7 +12,6 @@
 ## About
 Endb is a easy-to-use SQLite3 ORM (Object-Relational Mapping) for Node.js
 New to Endb? Check out the [API Reference](https://endb.js.org)
-
 - Full transaction support
 - High performance, efficiency, and safety
 - Scalable
@@ -31,9 +30,8 @@ const endb = require('endb');
 module.exports = endb.model('User', {
   id: endb.Types.NUMBER,
   username: endb.Types.STRING,
-  description: endb.Types.TEXT,
-  created: endb.Types.DATE,
-  done: endb.Types.NULL
+  verified: endb.Types.BOOLEAN,
+  null: endb.Types.NULL
 });
 ```
 
@@ -44,13 +42,12 @@ const User = require('./models/User');
 User.insert({
   id: 123456789,
   username: 'testuser',
-  description: 'a test user',
-  created: Date.now(),
-  done: null
+  verified: true,
+  null: null
 });
-
-User.find({ id: 123456789, description: 'a test user' });
-User.update({ id: 123456789 }, { description: 'test user' });
+User.find({ id: 123456789, username: 'testuser' });
+User.update({ id: 123456789 }, { verified: false });
+User.has({ id: 123456789 });
 User.delete({ username: 'testuser' });
 User.close();
 ```

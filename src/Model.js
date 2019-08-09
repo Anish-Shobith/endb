@@ -1,12 +1,16 @@
 'use strict';
 
-const SQLite = require('better-sqlite3');
+const Database = require('better-sqlite3');
 const fs = require('fs');
 const path = require('path');
-const Error = require('./EndbError');
-const Util = require('./Util');
-const init = Symbol('init');
 const check = Symbol('check');
+const init = Symbol('init');
+const arrayify = require('./util/arrayify');
+const DataTypes = require('./util/DataTypes');
+const limit = require('./util/limit');
+const mergeUpdate = require('./util/mergeUpdate');
+const order = require('./util/order');
+const where = require('./util/where');
 
 /**
  * @class Model
@@ -27,7 +31,7 @@ class Model {
         if (this.fileMustExist === true && !existsSync(this.fileName)) {
             throw new Error(`${this.fileName} does not exist in the directory`);
         }
-        this._db = new SQLite(`${this.path}${path.sep}${this.fileName}${Util.extension}`, {
+        this._db = new Database(`${this.path}${path.sep}${this.fileName}.db`, {
             fileMustExist: this.fileMustExist,
             timeout: this.timeout
         });
@@ -47,11 +51,21 @@ class Model {
     }
 
     /**
+     * Backups the model of the database
+     * @method Model#backup
+     * @param {string} path The path for the backup file
+     * @param {*} [options] The options for the backup
+     */
+    backup(path, options) {
+        return this._db.backup(path.resolve(path), options);
+    }
+
+    /**
      * Closes the database connection
      * @method Model#close
      * @returns {undefined}
      * @example
-     * Model.close().then(console.log).catch(console.error);
+     * Model.close();
      */
     close() {
         this[check]();
@@ -62,22 +76,19 @@ class Model {
     /**
      * Deletes the document that matches conditions from the model
      * @method Model#delete
-     * @param {Object} [conditions] Filter the delete
-     * @returns {Model}
+     * @param {Object} [criteria] Criteria for delete
+     * @returns {Object}
+     * @example
+     * Model.delete({ id: 123456789 });
      */
-    delete(conditions = {}) {
+    delete(criteria = {}) {
         this[check]();
         const query = [
             `DELETE FROM \`${this.name}\``,
-            Util.where(conditions)
+            where(criteria)
         ].filter(array => !!array).join(' ');
         const stmt = this._db.prepare(query);
-        if (conditions) {
-            stmt.run(conditions);
-        } else {
-            stmt.run();
-        }
-        return this;
+        return criteria ? stmt.run(criteria) : stmt.run();
     }
 
     /**
@@ -94,41 +105,50 @@ class Model {
     /**
      * Deletes all documents from the model
      * @method Model#deleteAll
-     * @returns {Model}
+     * @returns {Object}
      */
     deleteAll() {
         this[check]();
-        this._db.prepare(`DELETE FROM \`${this.name}\`;`).run();
-        return this;
+        return this._db.prepare(`DELETE FROM \`${this.name}\`;`).run();
     }
 
     /**
-     * 
-     * @param {*} id 
+     * Whether or not, the document exists or not in the model
+     * @method Model#has
+     * @param {Object} criteria Criteria to fetch the doc
+     * @returns {boolean}
+     * @example
+     * const has = Model.has({ id: 123456789 });
+     * console.log(has);
      */
-    has(id) {
+    has(criteria) {
         this[check]();
-        const data = this._db.prepare(`SELECT 1 FROM \`${this.name}\` WHERE _id = @${id} LIMIT 1`).run();
-        return data ? true : false;
+        const columns = arrayify(Object.keys(this.schema)).sort();
+        const query = [
+            `SELECT ${columns.join(', ')} FROM \`${this.name}\``,
+            where(criteria)
+        ].filter(array => !!array).join(' ');
+        const stmt = this._db.prepare(query).get(criteria);
+        return stmt ? true : false;
     }
 
     /**
      * Finds a document taking filter into account
      * @method Model#find
-     * @param {Object} [where] Value(s) of document to find. If where object is not supplied, all documents are returned
+     * @param {Object} [criteria] Criteria to fetch the doc. If criteria object is not supplied, all documents are returned
      * @returns {any[]}
      */
-    find(where = {}) {
+    find(criteria = {}) {
         this[check]();
-        const columns = Util.arrayify(Object.keys(this.schema)).sort();
+        const columns = arrayify(Object.keys(this.schema)).sort();
         const query = [
             `SELECT ${columns.join(', ')} FROM \`${this.name}\``,
-            Util.where(where),
-            Util.order(where),
-            Util.limit(where)
+            where(criteria),
+            order(criteria),
+            limit(criteria)
         ].filter(array => !!array).join(' ');
         const stmt = this._db.prepare(query);
-        return where ? stmt.all(where) : stmt.all();
+        return criteria ? stmt.all(criteria) : stmt.all();
     }
 
     /**
@@ -136,13 +156,19 @@ class Model {
      * @method Model#insert
      * @param {Object} doc The document to insert to the model
      * @returns {Object}
+     * @example
+     * Model.insert({
+     *     id: 123456789,
+     *     username: 'username',
+     *     verified: true
+     * });
      */
     insert(doc = {}) {
         this[check]();
         const columns = Object.keys(this.schema);
         const names = columns.join(', ');
         const values = columns.map(col => `@${col}`).join(', ');
-        this._db.prepare(`INSERT INTO ${this.name} (${names}) VALUES(${values});`).run(doc);
+        this._db.prepare(`INSERT INTO \`${this.name}\` (${names}) VALUES(${values});`).run(doc);
         return doc;
     }
 
@@ -150,26 +176,30 @@ class Model {
      * Loads a compiled SQLite3 extension and applies it to the current database connection
      * @method Model#loadExtension
      * @param {string} path
+     * @returns {void}
      */
     loadExtension(path) {
-        return this._db.loadExtension(path.resolve(process.cwd(), path));
+        this._db.loadExtension(path.resolve(process.cwd(), path));
+        return undefined;
     }
 
     /**
      * Updates a document values by finding the values
      * @method Model#update
-     * @param {Object} [where] Value(s) of document to find
-     * @param {*} clause The update
+     * @param {Object} [criteria] Value(s) of document to find
+     * @param {Object} clause The update
      * @returns {Object}
+     * @example
+     * Model.update({ id: 1234567890 }, { username: 'newuser' });
      */
-    update(filter, clause) {
+    update(criteria, clause) {
         this[check]();
-        const values = Object.keys(filter).map(k => (`${k} = @value_${k}`)).join(', ');
+        const values = Object.keys(criteria).map(k => (`${k} = @value_${k}`)).join(', ');
         const query = [
             `UPDATE OR REPLACE \`${this.name}\` SET ${values}`,
-            Util.where(clause, 'clause_')
+            where(clause, 'clause_')
         ].filter(array => !!array).join(' ');
-        this._db.prepare(query).run(Util.mergeUpdate(filter, clause));
+        this._db.prepare(query).run(mergeUpdate(criteria, clause));
         return { ...clause };
     }
 
@@ -177,7 +207,7 @@ class Model {
         if (db) {
             this.isReady = true;
         } else {
-            throw new Error('Database could not be loaded', 'EndbConnectionError');
+            throw new Error('Database could not be loaded');
         }
         const table = db.prepare(`SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = ?;`).get(this.name);
         if (!table['count(*)']) {
@@ -190,12 +220,10 @@ class Model {
     }
 
     [check]() {
-        if (!this.isReady) throw new Error('Database is not ready. Refer to the documentation to use Endb.onReady', 'EndbConnectionError');
-        if (this.isDestroyed) throw new Error('Database has been destroyed', 'EndbConnectionError');
+        if (!this.isReady) throw new Error('Database is not ready. Refer to the documentation to use Endb.onReady');
+        if (this.isDestroyed) throw new Error('Database has been destroyed');
     }
 }
 
 module.exports = Model;
-module.exports.Error = Error;
-module.exports.Util = Util;
-module.exports.Types = Util.DataTypes;
+module.exports.Types = DataTypes;

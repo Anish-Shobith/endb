@@ -38,7 +38,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/endb/endb" target="_blank" class="menu-item" id="github-link" >GitHub</a></h2><h2><a href="https://npmjs.com/package/endb" target="_blank" class="menu-item" id="npm-link" >NPM</a></h2><h3>Classes</h3><ul><li><a href="Endb.html">Endb</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Endb.html#.model">model</a></li></ul></li><li><a href="Model.html">Model</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Model.html#close">close</a></li><li data-type='method' style='display: none;'><a href="Model.html#delete">delete</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteAll">deleteAll</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteModel">deleteModel</a></li><li data-type='method' style='display: none;'><a href="Model.html#find">find</a></li><li data-type='method' style='display: none;'><a href="Model.html#insert">insert</a></li><li data-type='method' style='display: none;'><a href="Model.html#loadExtension">loadExtension</a></li><li data-type='method' style='display: none;'><a href="Model.html#update">update</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/endb/endb" target="_blank" class="menu-item" id="github-link" >GitHub</a></h2><h2><a href="https://npmjs.com/package/endb" target="_blank" class="menu-item" id="npm-link" >NPM</a></h2><h3>Classes</h3><ul><li><a href="Endb.html">Endb</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Endb.html#model">model</a></li><li data-type='method' style='display: none;'><a href="Endb.html#models">models</a></li></ul></li><li><a href="Model.html">Model</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Model.html#backup">backup</a></li><li data-type='method' style='display: none;'><a href="Model.html#close">close</a></li><li data-type='method' style='display: none;'><a href="Model.html#delete">delete</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteAll">deleteAll</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteModel">deleteModel</a></li><li data-type='method' style='display: none;'><a href="Model.html#find">find</a></li><li data-type='method' style='display: none;'><a href="Model.html#has">has</a></li><li data-type='method' style='display: none;'><a href="Model.html#insert">insert</a></li><li data-type='method' style='display: none;'><a href="Model.html#loadExtension">loadExtension</a></li><li data-type='method' style='display: none;'><a href="Model.html#update">update</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -55,15 +55,21 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
-const SQLite = require('better-sqlite3');
+const Database = require('better-sqlite3');
 const fs = require('fs');
 const path = require('path');
-const Error = require('./EndbError');
-const Util = require('./Util');
-const init = Symbol('init');
 const check = Symbol('check');
+const init = Symbol('init');
+const arrayify = require('./util/arrayify');
+const DataTypes = require('./util/DataTypes');
+const limit = require('./util/limit');
+const mergeUpdate = require('./util/mergeUpdate');
+const order = require('./util/order');
+const where = require('./util/where');
 
 /**
+ * @class Model
+ * @classdesc
  * Represents a table in the database
  */
 class Model {
@@ -71,16 +77,16 @@ class Model {
         this.schema = schema;
         this.options = options;
         this.name = options.name;
-        this.fileName = options.fileName.replace(/[^a-z0-9]/gi, '_') || 'endb';
-        this.path = path.resolve(process.cwd(), options.path) || path.resolve(process.cwd(), './');
-        this.fileMustExist = Boolean(options.fileMustExist) || false;
-        this.timeout = Number(options.timeout) || 5000;
-        this.wal = Boolean(options.wal) || true;
+        this.fileName = options.fileName ? options.fileName.replace(/[^a-z0-9]/gi, '_') : 'endb';
+        this.path = options.path ? path.resolve(process.cwd(), options.path) : path.resolve(process.cwd(), './');
+        this.fileMustExist = options.fileMustExist ? Boolean(options.fileMustExist) : false;
+        this.timeout = options.timeout ? Number(options.timeout) : 5000;
+        this.wal = options.wal ? Boolean(options.wal) : true;
         if (!fs.existsSync(this.path)) fs.mkdirSync(this.path);
         if (this.fileMustExist === true &amp;&amp; !existsSync(this.fileName)) {
             throw new Error(`${this.fileName} does not exist in the directory`);
         }
-        this._db = new SQLite(`${this.path}${path.sep}${this.fileName}${Util.extension}`, {
+        this._db = new Database(`${this.path}${path.sep}${this.fileName}.db`, {
             fileMustExist: this.fileMustExist,
             timeout: this.timeout
         });
@@ -94,8 +100,19 @@ class Model {
      * @returns {number} The number of rows in the database
      */
     get count() {
-        const data = this._db.prepare(`SELECT count(*) FROM ${this.name};`).get();
+        this[check]();
+        const data = this._db.prepare(`SELECT count(*) FROM \`${this.name}\`;`).get();
         return data['count(*)'];
+    }
+
+    /**
+     * Backups the model of the database
+     * @method Model#backup
+     * @param {string} path The path for the backup file
+     * @param {*} [options] The options for the backup
+     */
+    backup(path, options) {
+        return this._db.backup(path.resolve(path), options);
     }
 
     /**
@@ -103,7 +120,7 @@ class Model {
      * @method Model#close
      * @returns {undefined}
      * @example
-     * Model.close().then(console.log).catch(console.error);
+     * Model.close();
      */
     close() {
         this[check]();
@@ -114,22 +131,19 @@ class Model {
     /**
      * Deletes the document that matches conditions from the model
      * @method Model#delete
-     * @param {Object} [conditions] Filter the delete
-     * @returns {Model}
+     * @param {Object} [criteria] Criteria for delete
+     * @returns {Object}
+     * @example
+     * Model.delete({ id: 123456789 });
      */
-    delete(conditions = {}) {
+    delete(criteria = {}) {
         this[check]();
         const query = [
             `DELETE FROM \`${this.name}\``,
-            Util.where(conditions)
+            where(criteria)
         ].filter(array => !!array).join(' ');
         const stmt = this._db.prepare(query);
-        if (conditions) {
-            stmt.run(conditions);
-        } else {
-            stmt.run();
-        }
-        return this;
+        return criteria ? stmt.run(criteria) : stmt.run();
     }
 
     /**
@@ -146,31 +160,50 @@ class Model {
     /**
      * Deletes all documents from the model
      * @method Model#deleteAll
-     * @returns {Model}
+     * @returns {Object}
      */
     deleteAll() {
         this[check]();
-        this._db.prepare(`DELETE FROM \`${this.name}\`;`).run();
-        return this;
+        return this._db.prepare(`DELETE FROM \`${this.name}\`;`).run();
+    }
+
+    /**
+     * Whether or not, the document exists or not in the model
+     * @method Model#has
+     * @param {Object} criteria Criteria to fetch the doc
+     * @returns {boolean}
+     * @example
+     * const has = Model.has({ id: 123456789 });
+     * console.log(has);
+     */
+    has(criteria) {
+        this[check]();
+        const columns = arrayify(Object.keys(this.schema)).sort();
+        const query = [
+            `SELECT ${columns.join(', ')} FROM \`${this.name}\``,
+            where(criteria)
+        ].filter(array => !!array).join(' ');
+        const stmt = this._db.prepare(query).get(criteria);
+        return stmt ? true : false;
     }
 
     /**
      * Finds a document taking filter into account
      * @method Model#find
-     * @param {Object} [where] Value(s) of document to find. If where object is not supplied, all documents are returned
+     * @param {Object} [criteria] Criteria to fetch the doc. If criteria object is not supplied, all documents are returned
      * @returns {any[]}
      */
-    find(where = {}) {
+    find(criteria = {}) {
         this[check]();
-        const columns = Util.arrayify(Object.keys(this.schema)).sort();
+        const columns = arrayify(Object.keys(this.schema)).sort();
         const query = [
-            `SELECT ${columns.join(', ')} FROM ${this.name}`,
-            Util.where(where),
-            Util.order(where),
-            Util.limit(where)
+            `SELECT ${columns.join(', ')} FROM \`${this.name}\``,
+            where(criteria),
+            order(criteria),
+            limit(criteria)
         ].filter(array => !!array).join(' ');
         const stmt = this._db.prepare(query);
-        return filter ? stmt.all(where) : stmt.all();
+        return criteria ? stmt.all(criteria) : stmt.all();
     }
 
     /**
@@ -178,13 +211,19 @@ class Model {
      * @method Model#insert
      * @param {Object} doc The document to insert to the model
      * @returns {Object}
+     * @example
+     * Model.insert({
+     *     id: 123456789,
+     *     username: 'username',
+     *     verified: true
+     * });
      */
     insert(doc = {}) {
         this[check]();
         const columns = Object.keys(this.schema);
         const names = columns.join(', ');
         const values = columns.map(col => `@${col}`).join(', ');
-        this._db.prepare(`INSERT INTO ${this.name} (${names}) VALUES(${values});`).run(doc);
+        this._db.prepare(`INSERT INTO \`${this.name}\` (${names}) VALUES(${values});`).run(doc);
         return doc;
     }
 
@@ -192,30 +231,38 @@ class Model {
      * Loads a compiled SQLite3 extension and applies it to the current database connection
      * @method Model#loadExtension
      * @param {string} path
+     * @returns {void}
      */
     loadExtension(path) {
-        return this._db.loadExtension(path.resolve(process.cwd(), path));
+        this._db.loadExtension(path.resolve(process.cwd(), path));
+        return undefined;
     }
 
     /**
      * Updates a document values by finding the values
      * @method Model#update
-     * @param {Object} [where] Value(s) of document to find
-     * @param {*} clause The update
+     * @param {Object} [criteria] Value(s) of document to find
+     * @param {Object} clause The update
      * @returns {Object}
+     * @example
+     * Model.update({ id: 1234567890 }, { username: 'newuser' });
      */
-    update(filter, clause) {
+    update(criteria, clause) {
         this[check]();
-        const values = Object.keys(filter).map(k => (`${k} = @value_${k}`)).join(', ');
-        this._db.prepare(`UPDATE OR REPLACE ${this.name} SET ${values} ${Util.where(clause, 'clause_')}`).run(Util.mergeUpdate(filter, clause));
-        return { filter, clause };
+        const values = Object.keys(criteria).map(k => (`${k} = @value_${k}`)).join(', ');
+        const query = [
+            `UPDATE OR REPLACE \`${this.name}\` SET ${values}`,
+            where(clause, 'clause_')
+        ].filter(array => !!array).join(' ');
+        this._db.prepare(query).run(mergeUpdate(criteria, clause));
+        return { ...clause };
     }
 
     async [init](db = this._db) {
         if (db) {
             this.isReady = true;
         } else {
-            throw new Error('Database could not be loaded', 'EndbConnectionError');
+            throw new Error('Database could not be loaded');
         }
         const table = db.prepare(`SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = ?;`).get(this.name);
         if (!table['count(*)']) {
@@ -228,15 +275,13 @@ class Model {
     }
 
     [check]() {
-        if (!this.isReady) throw new Error('Database is not ready. Refer to the documentation to use Endb.onReady', 'EndbConnectionError');
-        if (this.isDestroyed) throw new Error('Database has been destroyed', 'EndbConnectionError');
+        if (!this.isReady) throw new Error('Database is not ready. Refer to the documentation to use Endb.onReady');
+        if (this.isDestroyed) throw new Error('Database has been destroyed');
     }
 }
 
 module.exports = Model;
-module.exports.Error = Error;
-module.exports.Util = Util;
-module.exports.Types = Util.DataTypes;</code></pre>
+module.exports.Types = DataTypes;</code></pre>
         </article>
     </section>
 
@@ -250,7 +295,7 @@ module.exports.Types = Util.DataTypes;</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Aug 07 2019 16:07:51 GMT+0400 (Gulf Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Aug 09 2019 17:32:22 GMT+0400 (Gulf Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>

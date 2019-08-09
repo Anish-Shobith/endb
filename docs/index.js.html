@@ -38,7 +38,7 @@
     
     <input type="text" id="nav-search" placeholder="Search" />
     
-    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/endb/endb" target="_blank" class="menu-item" id="github-link" >GitHub</a></h2><h2><a href="https://npmjs.com/package/endb" target="_blank" class="menu-item" id="npm-link" >NPM</a></h2><h3>Classes</h3><ul><li><a href="Endb.html">Endb</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Endb.html#.model">model</a></li></ul></li><li><a href="Model.html">Model</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Model.html#close">close</a></li><li data-type='method' style='display: none;'><a href="Model.html#delete">delete</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteAll">deleteAll</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteModel">deleteModel</a></li><li data-type='method' style='display: none;'><a href="Model.html#find">find</a></li><li data-type='method' style='display: none;'><a href="Model.html#insert">insert</a></li><li data-type='method' style='display: none;'><a href="Model.html#loadExtension">loadExtension</a></li><li data-type='method' style='display: none;'><a href="Model.html#update">update</a></li></ul></li></ul>
+    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/endb/endb" target="_blank" class="menu-item" id="github-link" >GitHub</a></h2><h2><a href="https://npmjs.com/package/endb" target="_blank" class="menu-item" id="npm-link" >NPM</a></h2><h3>Classes</h3><ul><li><a href="Endb.html">Endb</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Endb.html#model">model</a></li><li data-type='method' style='display: none;'><a href="Endb.html#models">models</a></li></ul></li><li><a href="Model.html">Model</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Model.html#backup">backup</a></li><li data-type='method' style='display: none;'><a href="Model.html#close">close</a></li><li data-type='method' style='display: none;'><a href="Model.html#delete">delete</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteAll">deleteAll</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteModel">deleteModel</a></li><li data-type='method' style='display: none;'><a href="Model.html#find">find</a></li><li data-type='method' style='display: none;'><a href="Model.html#has">has</a></li><li data-type='method' style='display: none;'><a href="Model.html#insert">insert</a></li><li data-type='method' style='display: none;'><a href="Model.html#loadExtension">loadExtension</a></li><li data-type='method' style='display: none;'><a href="Model.html#update">update</a></li></ul></li></ul>
 </nav>
 
 <div id="main">
@@ -55,33 +55,46 @@
         <article>
             <pre class="prettyprint source linenums"><code>'use strict';
 
-const { EndbError: Error } = require('./EndbError');
+const DataTypes = require('./util/DataTypes');
 const Model = require('./Model');
-const Util = require('./Util');
 
 /**
- * The main class and the entry point to endb
+ * @class Endb
+ * @classdesc
+ * The database and main class
  */
 class Endb {
     constructor(options = {}) {
-        this.options = options;
-    }
 
-    static addModel(model) {
-        return this.models[model.name] = model;
+        /**
+         * The options of the database
+         * @type {Object}
+         */
+        this.options = options;
     }
 
     /**
      * Creates a new model, representing a table in the database
+     * @method Endb#model
      * @param {string} name The name of the model
      * @param {Object} schema The attributes of the model. Each attribute is a column in the database
      * @param {Object} [options] The options for the function
      * @returns {Model}
+     * @example
+     * const Model = Endb.model('Model', {
+     *     id: Endb.Types.NUMBER,
+     *     username: Endb.Types.STRING,
+     *     verified: Endb.Types.BOOLEAN
+     * });
+     * 
+     * Model.insert({
+     *    id: 123456789,
+     *    username: 'username',
+     *    verified: true
+     * });
      */
     static model(name, schema = {}, options = {}) {
-        if (typeof name !== 'string' || typeof name === 'undefined') {
-            throw new Error('Name must be a string', 'EndbTypeError');
-        }
+        if (typeof name !== 'string') throw new TypeError('Name must be a string');
         options.endb = this;
         options.name = name.replace(/[^a-z0-9]/gi, '_');
         options.schema = schema;
@@ -92,16 +105,19 @@ class Endb {
         return model;
     }
 
+    /**
+     * Gets all the models associated with the database
+     * @method Endb#models
+     * @returns {Object}
+     */
     static models() {
         return this.models;
     }
 }
 
 module.exports = Endb;
-module.exports.Error = Error;
 module.exports.Model = Model;
-module.exports.Util = Util;
-module.exports.Types = Util.DataTypes;
+module.exports.Types = DataTypes;
 module.exports.version = require('../package.json').version;</code></pre>
         </article>
     </section>
@@ -116,7 +132,7 @@ module.exports.version = require('../package.json').version;</code></pre>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Wed Aug 07 2019 16:07:51 GMT+0400 (Gulf Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Aug 09 2019 17:32:22 GMT+0400 (Gulf Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
 </footer>
 
 <script>prettyPrint();</script>
