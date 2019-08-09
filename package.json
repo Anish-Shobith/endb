@@ -1,6 +1,6 @@
 {
     "name": "endb",
-    "version": "0.10.2",
+    "version": "0.11.0",
     "description": "Endb is a easy-to-use SQLite3 ORM (Object-Relational Mapping) for Node.js",
     "main": "src/index.js",
     "scripts": {
