@@ -1,7 +1,7 @@
 {
     "name": "endb",
     "version": "0.11.0",
-    "description": "Endb is a easy-to-use SQLite3 ORM (Object-Relational Mapping) for Node.js",
+    "description": "Endb is an easy-to-use Node.js ORM for SQLite3.",
     "main": "src/index.js",
     "scripts": {
         "start": "npm run build:docs",
@@ -25,6 +25,9 @@
         "url": "https://github.com/endb/endb/issues"
     },
     "homepage": "https://endb.js.org",
+    "engines": {
+        "node": ">=8.9.4"
+    },
     "dependencies": {
         "better-sqlite3": "^5.4.2"
     },
