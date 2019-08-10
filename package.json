@@ -6,7 +6,7 @@
     "scripts": {
         "start": "npm run build:docs",
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build:docs": "jsdoc -c .jsdoc.json"
+        "build:docs": "./node_modules/.bin/jsdoc -c .jsdoc.json"
     },
     "repository": {
         "type": "git",
@@ -32,7 +32,7 @@
         "better-sqlite3": "^5.4.2"
     },
     "devDependencies": {
-        "docdash": "^1.1.1",
+        "better-docs": "^1.1.6",
         "jsdoc": "^3.6.3"
     }
 }

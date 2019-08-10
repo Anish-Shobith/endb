@@ -3,50 +3,71 @@
 <head>
     
     <meta charset="utf-8">
-    <title>Model - Endb</title>
-    
-    <meta name="description" content="A simplified & powerful key-value database wrapper for ease-of-use" />
-    
-    
-    
-    <meta property="og:title" content="Endb"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:image" content=""/>
-    <meta property="og:site_name" content="endb"/>
-    <meta property="og:url" content="endb.js.org"/>
-    
+    <title>JSDoc: Model</title>
+
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
-    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
-    <script src="scripts/nav.js" defer></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
 </head>
+
 <body>
-
-<input type="checkbox" id="nav-trigger" class="nav-trigger" />
-<label for="nav-trigger" class="navicon-button x">
-  <div class="navicon"></div>
-</label>
-
-<label for="nav-trigger" class="overlay"></label>
-
-<nav class="wrap">
-    
-    <input type="text" id="nav-search" placeholder="Search" />
-    
-    <h2><a href="index.html">Home</a></h2><h2><a href="https://github.com/endb/endb" target="_blank" class="menu-item" id="github-link" >GitHub</a></h2><h2><a href="https://npmjs.com/package/endb" target="_blank" class="menu-item" id="npm-link" >NPM</a></h2><h3>Classes</h3><ul><li><a href="Endb.html">Endb</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Endb.html#model">model</a></li><li data-type='method' style='display: none;'><a href="Endb.html#models">models</a></li></ul></li><li><a href="Model.html">Model</a><ul class='methods'><li data-type='method' style='display: none;'><a href="Model.html#backup">backup</a></li><li data-type='method' style='display: none;'><a href="Model.html#close">close</a></li><li data-type='method' style='display: none;'><a href="Model.html#delete">delete</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteAll">deleteAll</a></li><li data-type='method' style='display: none;'><a href="Model.html#deleteModel">deleteModel</a></li><li data-type='method' style='display: none;'><a href="Model.html#find">find</a></li><li data-type='method' style='display: none;'><a href="Model.html#has">has</a></li><li data-type='method' style='display: none;'><a href="Model.html#insert">insert</a></li><li data-type='method' style='display: none;'><a href="Model.html#loadExtension">loadExtension</a></li><li data-type='method' style='display: none;'><a href="Model.html#update">update</a></li></ul></li></ul>
-</nav>
-
-<div id="main">
-    
-    <h1 class="page-title">Model</h1>
-    
-
-    
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                     
+                        <h1 class="navbar-item">Endb</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                 
+                <div class="navbar-menu">
+                    <div class="navbar-end">
+                    
+                        <div class="navbar-item">
+                            <a href="https://github.com/endb/endb" target="_blank">GitHub</a>
+                        </div>
+                    
+                        <div class="navbar-item">
+                            <a href="https://npmjs.com/package/endb" target="_blank">NPM</a>
+                        </div>
+                    
+                    </div>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="Endb.html">Endb</a></li><li><a href="Model.html">Model</a></li></ul></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Class</p>
+                        <h1>Model</h1>
+                    </header>
+                    
+                    
 
 
 
@@ -55,9 +76,7 @@
 
 <header>
     
-        <h2>
-        Model
-        </h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Model<span class="signature">()</span><span class="type-signature"></span></h2>
         
             <div class="class-description"><p>Represents a table in the database</p></div>
         
@@ -65,18 +84,34 @@
 </header>
 
 <article>
+    <div class="container-overview">
     
-        <div class="container-overview">
         
-            
+            <div class='vertical-section'>
+                <h3 class="title"><span>Constructor</span></h3>
+                <div class="members">
+                    <div class="member">
 
     
-    <h2>Constructor</h2>
+    <h4 class="name" id="Model">
+        
+        <span class="code-name">
+            new Model<span class="signature">()</span><span class="type-signature"></span>
+        </span>
+    </h4>
     
 
-    <h4 class="name" id="Model"><span class="type-signature"></span>new Model<span class="signature">()</span><span class="type-signature"></span></h4>
-
     
+    
+
+
+
+
+
+
+
+
+
 
 
 
@@ -84,11 +119,6 @@
 <dl class="details">
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line15">line 15</a>
-    </li></ul></dd>
-    
 
     
 
@@ -111,13 +141,19 @@
     
 
     
-
     
 
     
 
     
 
+    
+        <p class="tag-source">
+            <a href="Model.js.html" class="button">View Source</a>
+            <span>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line15">line 15</a>
+            </span>
+        </p>
     
 </dl>
 
@@ -141,19 +177,17 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+</div>
+                </div>
+            </div>
         
-        </div>
+    
+    </div>
+
+    
+
+    
+
     
 
     
@@ -161,67 +195,23 @@
     
 
     
-    
-    
-
-     
 
     
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
+        <div class='vertical-section'>
+            <h3 class="title"><span>Members</span></h3>
+            <div class="members">
             
-<h4 class="name" id="count"><span class="type-signature"></span>count<span class="type-signature"></span></h4>
+                <div class="member">
+
+<h4 class="name" id="count">
+    
+    <span class="code-name">
+        count
+    </span>
+</h4>
 
 
 <p class="summary"><p>Gets the number of documents in the database</p>.</p>
-
-
-
-
-<dl class="details">
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line47">line 47</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
 
 
 
@@ -233,37 +223,9 @@
 
 
 
-
-
-
-        
-    
-
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    <h4 class="name" id="backup"><span class="type-signature"></span>backup<span class="signature">(path, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
-
-    
-    <p class="summary"><p>Backups the model of the database</p>.</p>
-    
-
-
-
-
 <dl class="details">
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line53">line 53</a>
-    </li></ul></dd>
-    
 
     
 
@@ -286,13 +248,19 @@
     
 
     
-
     
 
     
 
     
 
+    
+        <p class="tag-source">
+            <a href="Model.js.html" class="button">View Source</a>
+            <span>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line47">line 47</a>
+            </span>
+        </p>
     
 </dl>
 
@@ -300,11 +268,36 @@
 
 
 
-<div class="description">
-    <p>Backups the model of the database</p>
 </div>
+            
+            </div>
+        </div>
+    
 
+    
+        <div class='vertical-section'>
+            <h3 class="title"><span>Methods</span></h3>
+            <div class="members">
+            
+                <div class="member">
 
+    
+    <h4 class="name" id="backup">
+        
+        <span class="code-name">
+            backup<span class="signature">(path, options<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span>
+        </span>
+    </h4>
+    
+
+    
+    <p class="summary"><p>Backups the model of the database</p>.</p>
+    
+    
+    <div class="description">
+        <p>Backups the model of the database</p>
+    </div>
+    
 
 
 
@@ -339,67 +332,71 @@
     <tbody>
     
 
-        <tr>
-            
-                <td class="name"><code>path</code></td>
-            
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>path</code></td>
+  
 
-            <td class="type">
-            
-                
+  <td class="type">
+  
+      
 <span class="param-type">string</span>
 
 
-            
-            </td>
+  
+  </td>
 
-            
-                <td class="attributes">
-                
+  
+      <td class="attributes">
+      
 
-                
+      
 
-                
-                </td>
-            
+      
+      </td>
+  
 
-            
+  
 
-            <td class="description last"><p>The path for the backup file</p></td>
-        </tr>
+  <td class="description last"><p>The path for the backup file</p></td>
+</tr>
+
 
     
 
-        <tr>
-            
-                <td class="name"><code>options</code></td>
-            
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>options</code></td>
+  
 
-            <td class="type">
-            
-                
+  <td class="type">
+  
+      
 <span class="param-type">*</span>
 
 
-            
-            </td>
+  
+  </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
 
-                
+      
 
-                
-                </td>
-            
+      
+      </td>
+  
 
-            
+  
 
-            <td class="description last"><p>The options for the backup</p></td>
-        </tr>
+  <td class="description last"><p>The options for the backup</p></td>
+</tr>
+
 
     
     </tbody>
@@ -409,42 +406,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="close"><span class="type-signature"></span>close<span class="signature">()</span><span class="type-signature"> &rarr; {undefined}</span></h4>
-
-    
-    <p class="summary"><p>Closes the database connection</p>.</p>
-    
-
-
-
-
 <dl class="details">
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line63">line 63</a>
-    </li></ul></dd>
-    
 
     
 
@@ -467,13 +431,19 @@
     
 
     
-
     
 
     
 
     
 
+    
+        <p class="tag-source">
+            <a href="Model.js.html" class="button">View Source</a>
+            <span>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line53">line 53</a>
+            </span>
+        </p>
     
 </dl>
 
@@ -481,14 +451,136 @@
 
 
 
-<div class="description">
-    <p>Closes the database connection</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+            
+                <div class="member">
+
+    
+    <h4 class="name" id="close">
+        
+        <span class="code-name">
+            close<span class="signature">()</span><span class="type-signature"> &rarr; {undefined}</span>
+        </span>
+    </h4>
+    
+
+    
+    <p class="summary"><p>Closes the database connection</p>.</p>
+    
+    
+    <div class="description">
+        <p>Closes the database connection</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="Model.js.html" class="button">View Source</a>
+            <span>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line63">line 63</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">undefined</span>
+
+
+    </div>
+    
 </div>
 
-
-
-
-
+                
+        </div>
+    </div>
 
 
 
@@ -498,53 +590,98 @@
     <pre class="prettyprint"><code>Model.close();</code></pre>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">undefined</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
+</div>
             
+                <div class="member">
 
     
-
-    <h4 class="name" id="delete"><span class="type-signature"></span>delete<span class="signature">(criteria<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="delete">
+        
+        <span class="code-name">
+            delete<span class="signature">(criteria<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Object}</span>
+        </span>
+    </h4>
+    
 
     
     <p class="summary"><p>Deletes the document that matches conditions from the model</p>.</p>
     
+    
+    <div class="description">
+        <p>Deletes the document that matches conditions from the model</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>criteria</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
+
+      
+
+      
+      </td>
+  
+
+  
+
+  <td class="description last"><p>Criteria for delete</p></td>
+</tr>
+
+
+    
+    </tbody>
+</table>
+
 
 
 
@@ -552,11 +689,6 @@
 <dl class="details">
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line76">line 76</a>
-    </li></ul></dd>
-    
 
     
 
@@ -579,13 +711,19 @@
     
 
     
-
     
 
     
 
     
 
+    
+        <p class="tag-source">
+            <a href="Model.js.html" class="button">View Source</a>
+            <span>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line76">line 76</a>
+            </span>
+        </p>
     
 </dl>
 
@@ -593,14 +731,41 @@
 
 
 
-<div class="description">
-    <p>Deletes the document that matches conditions from the model</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Object</span>
+
+
+    </div>
+    
 </div>
 
-
-
-
-
+                
+        </div>
+    </div>
 
 
 
@@ -610,114 +775,36 @@
     <pre class="prettyprint"><code>Model.delete({ id: 123456789 });</code></pre>
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
+</div>
             
-                <td class="name"><code>criteria</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last"><p>Criteria for delete</p></td>
-        </tr>
+                <div class="member">
 
     
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
+    <h4 class="name" id="deleteAll">
         
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Object</span>
-
-
-    </dd>
-</dl>
-
+        <span class="code-name">
+            deleteAll<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span>
+        </span>
+    </h4>
     
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="deleteAll"><span class="type-signature"></span>deleteAll<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
 
     
     <p class="summary"><p>Deletes all documents from the model</p>.</p>
     
+    
+    <div class="description">
+        <p>Deletes all documents from the model</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
 
 
 
@@ -725,11 +812,6 @@
 <dl class="details">
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line105">line 105</a>
-    </li></ul></dd>
-    
 
     
 
@@ -752,13 +834,19 @@
     
 
     
-
     
 
     
 
     
 
+    
+        <p class="tag-source">
+            <a href="Model.js.html" class="button">View Source</a>
+            <span>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line105">line 105</a>
+            </span>
+        </p>
     
 </dl>
 
@@ -766,9 +854,6 @@
 
 
 
-<div class="description">
-    <p>Deletes all documents from the model</p>
-</div>
 
 
 
@@ -782,49 +867,62 @@
 
 
 
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
         
 <span class="param-type">Object</span>
 
 
-    </dd>
-</dl>
-
+    </div>
     
+</div>
+
+                
+        </div>
+    </div>
 
 
 
-        
+
+</div>
             
+                <div class="member">
 
     
-
-    <h4 class="name" id="deleteModel"><span class="type-signature"></span>deleteModel<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span></h4>
+    <h4 class="name" id="deleteModel">
+        
+        <span class="code-name">
+            deleteModel<span class="signature">()</span><span class="type-signature"> &rarr; {void}</span>
+        </span>
+    </h4>
+    
 
     
     <p class="summary"><p>Deletes the model from the database</p>.</p>
     
+    
+    <div class="description">
+        <p>Deletes the model from the database</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
 
 
 
@@ -832,11 +930,6 @@
 <dl class="details">
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line94">line 94</a>
-    </li></ul></dd>
-    
 
     
 
@@ -859,13 +952,19 @@
     
 
     
-
     
 
     
 
     
 
+    
+        <p class="tag-source">
+            <a href="Model.js.html" class="button">View Source</a>
+            <span>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line94">line 94</a>
+            </span>
+        </p>
     
 </dl>
 
@@ -873,9 +972,6 @@
 
 
 
-<div class="description">
-    <p>Deletes the model from the database</p>
-</div>
 
 
 
@@ -889,102 +985,53 @@
 
 
 
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
         
 <span class="param-type">void</span>
 
 
-    </dd>
-</dl>
-
+    </div>
     
+</div>
+
+                
+        </div>
+    </div>
 
 
 
-        
+
+</div>
             
+                <div class="member">
 
     
-
-    <h4 class="name" id="find"><span class="type-signature"></span>find<span class="signature">(criteria<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;any>}</span></h4>
+    <h4 class="name" id="find">
+        
+        <span class="code-name">
+            find<span class="signature">(criteria<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Array.&lt;any>}</span>
+        </span>
+    </h4>
+    
 
     
     <p class="summary"><p>Finds a document taking filter into account</p>.</p>
     
-
-
-
-
-<dl class="details">
-
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line135">line 135</a>
-    </li></ul></dd>
+    <div class="description">
+        <p>Finds a document taking filter into account</p>
+    </div>
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Finds a document taking filter into account</p>
-</div>
-
-
 
 
 
@@ -1019,36 +1066,38 @@
     <tbody>
     
 
-        <tr>
-            
-                <td class="name"><code>criteria</code></td>
-            
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>criteria</code></td>
+  
 
-            <td class="type">
-            
-                
+  <td class="type">
+  
+      
 <span class="param-type">Object</span>
 
 
-            
-            </td>
+  
+  </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
 
-                
+      
 
-                
-                </td>
-            
+      
+      </td>
+  
 
-            
+  
 
-            <td class="description last"><p>Criteria to fetch the doc. If criteria object is not supplied, all documents are returned</p></td>
-        </tr>
+  <td class="description last"><p>Criteria to fetch the doc. If criteria object is not supplied, all documents are returned</p></td>
+</tr>
+
 
     
     </tbody>
@@ -1058,6 +1107,46 @@
 
 
 
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="Model.js.html" class="button">View Source</a>
+            <span>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line135">line 135</a>
+            </span>
+        </p>
+    
+</dl>
 
 
 
@@ -1069,37 +1158,119 @@
 
 
 
-<h5>Returns:</h5>
-
-        
 
 
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
         
 <span class="param-type">Array.&lt;any></span>
 
 
-    </dd>
-</dl>
-
+    </div>
     
+</div>
+
+                
+        </div>
+    </div>
 
 
 
-        
+
+</div>
             
+                <div class="member">
 
     
-
-    <h4 class="name" id="has"><span class="type-signature"></span>has<span class="signature">(criteria)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+    <h4 class="name" id="has">
+        
+        <span class="code-name">
+            has<span class="signature">(criteria)</span><span class="type-signature"> &rarr; {boolean}</span>
+        </span>
+    </h4>
+    
 
     
     <p class="summary"><p>Whether or not, the document exists or not in the model</p>.</p>
     
+    
+    <div class="description">
+        <p>Whether or not, the document exists or not in the model</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>criteria</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">Object</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>Criteria to fetch the doc</p></td>
+</tr>
+
+
+    
+    </tbody>
+</table>
+
 
 
 
@@ -1107,11 +1278,6 @@
 <dl class="details">
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line115">line 115</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1134,13 +1300,19 @@
     
 
     
-
     
 
     
 
     
 
+    
+        <p class="tag-source">
+            <a href="Model.js.html" class="button">View Source</a>
+            <span>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line115">line 115</a>
+            </span>
+        </p>
     
 </dl>
 
@@ -1148,14 +1320,41 @@
 
 
 
-<div class="description">
-    <p>Whether or not, the document exists or not in the model</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">boolean</span>
+
+
+    </div>
+    
 </div>
 
-
-
-
-
+                
+        </div>
+    </div>
 
 
 
@@ -1165,6 +1364,34 @@
     <pre class="prettyprint"><code>const has = Model.has({ id: 123456789 });console.log(has);</code></pre>
 
 
+</div>
+            
+                <div class="member">
+
+    
+    <h4 class="name" id="insert">
+        
+        <span class="code-name">
+            insert<span class="signature">(doc)</span><span class="type-signature"> &rarr; {Object}</span>
+        </span>
+    </h4>
+    
+
+    
+    <p class="summary"><p>Inserts a document to the model</p>.</p>
+    
+    
+    <div class="description">
+        <p>Inserts a document to the model</p>
+    </div>
+    
+
+
+
+
+
+
+
 
 
     <h5>Parameters:</h5>
@@ -1190,26 +1417,28 @@
     <tbody>
     
 
-        <tr>
-            
-                <td class="name"><code>criteria</code></td>
-            
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>doc</code></td>
+  
 
-            <td class="type">
-            
-                
+  <td class="type">
+  
+      
 <span class="param-type">Object</span>
 
 
-            
-            </td>
+  
+  </td>
 
-            
+  
 
-            
+  
 
-            <td class="description last"><p>Criteria to fetch the doc</p></td>
-        </tr>
+  <td class="description last"><p>The document to insert to the model</p></td>
+</tr>
+
 
     
     </tbody>
@@ -1219,60 +1448,9 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-    
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="insert"><span class="type-signature"></span>insert<span class="signature">(doc)</span><span class="type-signature"> &rarr; {Object}</span></h4>
-
-    
-    <p class="summary"><p>Inserts a document to the model</p>.</p>
-    
-
-
-
-
 <dl class="details">
 
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line154">line 154</a>
-    </li></ul></dd>
-    
 
     
 
@@ -1295,13 +1473,19 @@
     
 
     
-
     
 
     
 
     
 
+    
+        <p class="tag-source">
+            <a href="Model.js.html" class="button">View Source</a>
+            <span>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line154">line 154</a>
+            </span>
+        </p>
     
 </dl>
 
@@ -1309,14 +1493,41 @@
 
 
 
-<div class="description">
-    <p>Inserts a document to the model</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">Object</span>
+
+
+    </div>
+    
 </div>
 
-
-
-
-
+                
+        </div>
+    </div>
 
 
 
@@ -1326,155 +1537,27 @@
     <pre class="prettyprint"><code>Model.insert({    id: 123456789,    username: 'username',    verified: true});</code></pre>
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
+</div>
             
-                <td class="name"><code>doc</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"><p>The document to insert to the model</p></td>
-        </tr>
+                <div class="member">
 
     
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
+    <h4 class="name" id="loadExtension">
         
-
-
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">Object</span>
-
-
-    </dd>
-</dl>
-
+        <span class="code-name">
+            loadExtension<span class="signature">(path)</span><span class="type-signature"> &rarr; {void}</span>
+        </span>
+    </h4>
     
-
-
-
-        
-            
-
-    
-
-    <h4 class="name" id="loadExtension"><span class="type-signature"></span>loadExtension<span class="signature">(path)</span><span class="type-signature"> &rarr; {void}</span></h4>
 
     
     <p class="summary"><p>Loads a compiled SQLite3 extension and applies it to the current database connection</p>.</p>
     
-
-
-
-
-<dl class="details">
-
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line175">line 175</a>
-    </li></ul></dd>
+    <div class="description">
+        <p>Loads a compiled SQLite3 extension and applies it to the current database connection</p>
+    </div>
     
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-<div class="description">
-    <p>Loads a compiled SQLite3 extension and applies it to the current database connection</p>
-</div>
-
-
 
 
 
@@ -1507,26 +1590,28 @@
     <tbody>
     
 
-        <tr>
-            
-                <td class="name"><code>path</code></td>
-            
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>path</code></td>
+  
 
-            <td class="type">
-            
-                
+  <td class="type">
+  
+      
 <span class="param-type">string</span>
 
 
-            
-            </td>
+  
+  </td>
 
-            
+  
 
-            
+  
 
-            <td class="description last"></td>
-        </tr>
+  <td class="description last"></td>
+</tr>
+
 
     
     </tbody>
@@ -1536,6 +1621,46 @@
 
 
 
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="Model.js.html" class="button">View Source</a>
+            <span>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line175">line 175</a>
+            </span>
+        </p>
+    
+</dl>
 
 
 
@@ -1547,100 +1672,65 @@
 
 
 
-<h5>Returns:</h5>
-
-        
 
 
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
         
 <span class="param-type">void</span>
 
 
-    </dd>
-</dl>
-
+    </div>
     
+</div>
+
+                
+        </div>
+    </div>
 
 
 
-        
+
+</div>
             
+                <div class="member">
 
     
-
-    <h4 class="name" id="update"><span class="type-signature"></span>update<span class="signature">(criteria<span class="signature-attributes">opt</span>, clause)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id="update">
+        
+        <span class="code-name">
+            update<span class="signature">(criteria<span class="signature-attributes">opt</span>, clause)</span><span class="type-signature"> &rarr; {Object}</span>
+        </span>
+    </h4>
+    
 
     
     <p class="summary"><p>Updates a document values by finding the values</p>.</p>
     
-
-
-
-
-<dl class="details">
-
     
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line186">line 186</a>
-    </li></ul></dd>
+    <div class="description">
+        <p>Updates a document values by finding the values</p>
+    </div>
     
 
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-</dl>
 
 
 
 
-
-<div class="description">
-    <p>Updates a document values by finding the values</p>
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Example</h5>
-    
-    <pre class="prettyprint"><code>Model.update({ id: 1234567890 }, { username: 'newuser' });</code></pre>
 
 
 
@@ -1670,67 +1760,71 @@
     <tbody>
     
 
-        <tr>
-            
-                <td class="name"><code>criteria</code></td>
-            
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>criteria</code></td>
+  
 
-            <td class="type">
-            
-                
+  <td class="type">
+  
+      
 <span class="param-type">Object</span>
 
 
-            
-            </td>
+  
+  </td>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
+  
+      <td class="attributes">
+      
+          &lt;optional><br>
+      
 
-                
+      
 
-                
-                </td>
-            
+      
+      </td>
+  
 
-            
+  
 
-            <td class="description last"><p>Value(s) of document to find</p></td>
-        </tr>
+  <td class="description last"><p>Value(s) of document to find</p></td>
+</tr>
+
 
     
 
-        <tr>
-            
-                <td class="name"><code>clause</code></td>
-            
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>clause</code></td>
+  
 
-            <td class="type">
-            
-                
+  <td class="type">
+  
+      
 <span class="param-type">Object</span>
 
 
-            
-            </td>
+  
+  </td>
 
-            
-                <td class="attributes">
-                
+  
+      <td class="attributes">
+      
 
-                
+      
 
-                
-                </td>
-            
+      
+      </td>
+  
 
-            
+  
 
-            <td class="description last"><p>The update</p></td>
-        </tr>
+  <td class="description last"><p>The update</p></td>
+</tr>
+
 
     
     </tbody>
@@ -1740,6 +1834,46 @@
 
 
 
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="Model.js.html" class="button">View Source</a>
+            <span>
+                <a href="Model.js.html">Model.js</a>, <a href="Model.js.html#line186">line 186</a>
+            </span>
+        </p>
+    
+</dl>
 
 
 
@@ -1751,28 +1885,48 @@
 
 
 
-<h5>Returns:</h5>
-
-        
 
 
-<dl class="param-type">
-    <dt>
-        Type
-    </dt>
-    <dd>
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
         
 <span class="param-type">Object</span>
 
 
-    </dd>
-</dl>
-
+    </div>
     
+</div>
+
+                
+        </div>
+    </div>
 
 
 
-        
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>Model.update({ id: 1234567890 }, { username: 'newuser' });</code></pre>
+
+
+</div>
+            
+            </div>
+        </div>
     
 
     
@@ -1785,25 +1939,23 @@
 
 
 
-    
-    
-</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<br class="clear">
-
-<footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Aug 09 2019 17:32:22 GMT+0400 (Gulf Standard Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Aug 10 2019 16:55:09 GMT+0400 (Gulf Standard Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>
+        </p>
+    </div>
 </footer>
 
-<script>prettyPrint();</script>
-<script src="scripts/polyfill.js"></script>
-<script src="scripts/linenumber.js"></script>
-
-<script src="scripts/search.js" defer></script>
-
-
-<script src="scripts/collapse.js" defer></script>
-
-
+<script> prettyPrint(); </script>
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
 </body>
 </html>

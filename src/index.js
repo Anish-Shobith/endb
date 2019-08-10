@@ -6,15 +6,20 @@ const Model = require('./Model');
 /**
  * @class Endb
  * @classdesc
- * The database and main class
+ * The main database  class
  */
 class Endb {
-    constructor(options = {}) {
 
-        /**
-         * The options of the database
-         * @type {Object}
-         */
+    /**
+     * NOT IMPLEMENTED
+     * Initializes a new main database
+     * @constructor
+     * @param {Object} [options] The options for the database
+     * @example
+     * const endb = require('endb');
+     * const db = new endb();
+     */
+    constructor(options = {}) {
         this.options = options;
     }
 
@@ -24,7 +29,7 @@ class Endb {
      * @param {string} name The name of the model
      * @param {Object} schema The attributes of the model. Each attribute is a column in the database
      * @param {Object} [options] The options for the function
-     * @returns {Model}
+     * @returns {Model} A new model instance, represening a table in the database
      * @example
      * const Model = Endb.model('Model', {
      *     id: Endb.Types.NUMBER,
@@ -32,11 +37,7 @@ class Endb {
      *     verified: Endb.Types.BOOLEAN
      * });
      * 
-     * Model.insert({
-     *    id: 123456789,
-     *    username: 'username',
-     *    verified: true
-     * });
+     * {@link Model}
      */
     static model(name, schema = {}, options = {}) {
         if (typeof name !== 'string') throw new TypeError('Name must be a string');
