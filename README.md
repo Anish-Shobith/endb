@@ -8,10 +8,9 @@ Endb
 [![node](https://badgen.net/npm/node/endb)](https://www.npmjs.com/package/endb)
 [![license](https://badgen.net/github/license/endb/endb)](https://github.com/endb/endb/blob/master/LICENSE)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-[![discord](https://discordapp.com/api/guilds/608366465376059429/embed.png)](https://discord.gg/A9qvE3g)
 [![patreon](https://img.shields.io/badge/donate-patreon-F96854.svg)](https://www.patreon.com/endb)
 
-Endb is an easy-to-use Node.js ORM for SQLite3. It follows [SemVer](http://semver.org/).
+Endb is an easy-to-use Node.js ORM for SQLite3. It follows [SemVer](http://semver.org/) and supports Node v8.9.4 or later.
 New to Endb? Check out the [API Reference](https://endb.js.org)
 - Full transaction support
 - High performance, efficiency, and safety
@@ -29,10 +28,10 @@ npm install --save endb
 // ./models/User.js:
 const endb = require('endb');
 module.exports = endb.model('User', {
-  id: endb.Types.NUMBER,
-  username: endb.Types.STRING,
-  verified: endb.Types.BOOLEAN,
-  null: endb.Types.NULL
+  id: endb.NUMBER,
+  username: endb.STRING,
+  verified: endb.BOOLEAN,
+  null: endb.NULL
 });
 ```
 

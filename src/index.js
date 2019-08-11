@@ -1,6 +1,6 @@
 'use strict';
 
-const DataTypes = require('./util/DataTypes');
+const DataTypes = require('./Util').DataTypes;
 const Model = require('./Model');
 
 /**
@@ -32,20 +32,47 @@ class Endb {
      * @returns {Model} A new model instance, represening a table in the database
      * @example
      * const Model = Endb.model('Model', {
-     *     id: Endb.Types.NUMBER,
-     *     username: Endb.Types.STRING,
-     *     verified: Endb.Types.BOOLEAN
+     *     id: Endb.NUMBER,
+     *     username: Endb.STRING,
+     *     verified: Endb.BOOLEAN
      * });
      * 
-     * {@link Model}
+     * // DataTypes
+     * [
+     *  'BIGINT',
+     *  'BLOB',
+     *  'BOOLEAN',
+     *  'CHAR',
+     *  'DATE',
+     *  'DECIMAL',
+     *  'DOUBLE',
+     *  'ENUM',
+     *  'FLOAT',
+     *  'INTEGER',
+     *  'JSON',
+     *  'NULL',
+     *  'NUMBER',
+     *  'REAL',
+     *  'SMALLINT',
+     *  'STRING',
+     *  'TEXT',
+     *  'TINYINT',
+     *  'UUID'
+     * ]
+     * 
+     * const Model = Endb.model('Model', {
+     *     id: Endb.NUMBER,
+     *     username: Endb.STRING,
+     *     verified: Endb.BOOLEAN
+     * }, { fileName: 'database', path: './data', fileMustExist: false, timeout: 5000, wal: true });
      */
-    static model(name, schema = {}, options = {}) {
+    static model(name, schema, options = {}) {
         if (typeof name !== 'string') throw new TypeError('Name must be a string');
-        options.endb = this;
-        options.name = name.replace(/[^a-z0-9]/gi, '_');
-        options.schema = schema;
-        options.columns = Object.keys(schema).map(col => (`\`${col}\` ${schema[col]}`));
+        if (typeof schema !== 'object') throw new TypeError('Schema must be an object');
         const model = new Model(schema, options);
+        model.endb = this;
+        model.name = name.replace(/[^a-z0-9]/gi, '_');
+        model.columns = Object.keys(schema).map(col => (`\`${col}\` ${schema[col]}`));
         this.models = {};
         this.models[model.name] = model;
         return model;
@@ -64,4 +91,6 @@ class Endb {
 module.exports = Endb;
 module.exports.Model = Model;
 module.exports.Types = DataTypes;
-module.exports.version = require('../package.json').version;
+for (const dataType in DataTypes) {
+    Endb[dataType] = DataTypes[dataType];
+}

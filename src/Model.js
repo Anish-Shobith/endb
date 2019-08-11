@@ -5,12 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const check = Symbol('check');
 const init = Symbol('init');
-const arrayify = require('./util/arrayify');
-const DataTypes = require('./util/DataTypes');
-const limit = require('./util/limit');
-const mergeUpdate = require('./util/mergeUpdate');
-const order = require('./util/order');
-const where = require('./util/where');
+const Util = require('./Util');
 
 /**
  * @class Model
@@ -21,12 +16,12 @@ class Model {
     constructor(schema, options = {}) {
         this.schema = schema;
         this.options = options;
-        this.name = options.name;
         this.fileName = options.fileName ? options.fileName.replace(/[^a-z0-9]/gi, '_') : 'endb';
         this.path = options.path ? path.resolve(process.cwd(), options.path) : path.resolve(process.cwd(), './');
         this.fileMustExist = options.fileMustExist ? Boolean(options.fileMustExist) : false;
         this.timeout = options.timeout ? Number(options.timeout) : 5000;
         this.wal = options.wal ? Boolean(options.wal) : true;
+        // this.memory = options.memory ? Boolean(options.memory) : false;
         if (!fs.existsSync(this.path)) fs.mkdirSync(this.path);
         if (this.fileMustExist === true && !existsSync(this.fileName)) {
             throw new Error(`${this.fileName} does not exist in the directory`);
@@ -57,6 +52,7 @@ class Model {
      * @param {*} [options] The options for the backup
      */
     backup(path, options) {
+        this[check]();
         return this._db.backup(path.resolve(path), options);
     }
 
@@ -85,7 +81,7 @@ class Model {
         this[check]();
         const query = [
             `DELETE FROM \`${this.name}\``,
-            where(criteria)
+            Util.where(criteria)
         ].filter(array => !!array).join(' ');
         const stmt = this._db.prepare(query);
         return criteria ? stmt.run(criteria) : stmt.run();
@@ -97,7 +93,8 @@ class Model {
      * @returns {void}
      */
     deleteModel() {
-        delete this.options.endb.models[this.name];
+        this[check]();
+        delete this.endb.models[this.name];
         this._db.prepare(`DROP TABLE \`${this.name}\`;`).run();
         return undefined;
     }
@@ -123,10 +120,10 @@ class Model {
      */
     has(criteria) {
         this[check]();
-        const columns = arrayify(Object.keys(this.schema)).sort();
+        const columns = Util.arrayify(Object.keys(this.schema)).sort();
         const query = [
             `SELECT ${columns.join(', ')} FROM \`${this.name}\``,
-            where(criteria)
+            Util.where(criteria)
         ].filter(array => !!array).join(' ');
         const stmt = this._db.prepare(query).get(criteria);
         return stmt ? true : false;
@@ -140,12 +137,12 @@ class Model {
      */
     find(criteria = {}) {
         this[check]();
-        const columns = arrayify(Object.keys(this.schema)).sort();
+        const columns = Util.arrayify(Object.keys(this.schema)).sort();
         const query = [
             `SELECT ${columns.join(', ')} FROM \`${this.name}\``,
-            where(criteria),
-            order(criteria),
-            limit(criteria)
+            Util.where(criteria),
+            Util.order(criteria),
+            Util.limit(criteria)
         ].filter(array => !!array).join(' ');
         const stmt = this._db.prepare(query);
         return criteria ? stmt.all(criteria) : stmt.all();
@@ -163,12 +160,12 @@ class Model {
      *     verified: true
      * });
      */
-    insert(doc = {}) {
+    insert(doc) {
         this[check]();
         const columns = Object.keys(this.schema);
         const names = columns.join(', ');
         const values = columns.map(col => `@${col}`).join(', ');
-        this._db.prepare(`INSERT INTO \`${this.name}\` (${names}) VALUES(${values});`).run(doc);
+        this._db.prepare(`INSERT INTO \`${this.name}\` (${names}) VALUES (${values});`).run(doc);
         return doc;
     }
 
@@ -197,10 +194,12 @@ class Model {
         const values = Object.keys(criteria).map(k => (`${k} = @value_${k}`)).join(', ');
         const query = [
             `UPDATE OR REPLACE \`${this.name}\` SET ${values}`,
-            where(clause, 'clause_')
+            Util.where(clause, 'clause_')
         ].filter(array => !!array).join(' ');
-        this._db.prepare(query).run(mergeUpdate(criteria, clause));
-        return { ...clause };
+        this._db.prepare(query).run(Util.mergeUpdate(criteria, clause));
+        return {
+            ...clause
+        };
     }
 
     async [init](db = this._db) {
@@ -211,19 +210,20 @@ class Model {
         }
         const table = db.prepare(`SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = ?;`).get(this.name);
         if (!table['count(*)']) {
-            db.prepare(`CREATE TABLE IF NOT EXISTS \`${this.name}\` (${this.options.columns});`).run();
-            db.pragma('synchronous = 1');
-            if (this.wal) db.pragma('journal_mode = wal');
+            db.prepare(`CREATE TABLE IF NOT EXISTS \`${this.name}\` (${this.columns});`).run();
+            if (this.wal) {
+                db.pragma('journal_mode = wal');
+            }
         }
         this.ready();
         return this.onReady;
     }
 
     [check]() {
-        if (!this.isReady) throw new Error('Database is not ready. Refer to the documentation to use Endb.onReady');
-        if (this.isDestroyed) throw new Error('Database has been destroyed');
+        if (!this.isReady) throw new Error('Database connection is not ready');
+        if (this.isDestroyed) throw new Error('Database connection is destroyed and is inaccesible');
     }
 }
 
 module.exports = Model;
-module.exports.Types = DataTypes;
+module.exports.Types = Util.DataTypes;
