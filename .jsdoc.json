@@ -25,7 +25,7 @@
         "linenums": true,
         "better-docs": {
             "name": "Endb",
-            "logo": "docs/icon.png",
+            "logo": "./docs/icon.png",
             "navigation": [{
                     "label": "GitHub",
                     "href": "https://github.com/endb/endb"
