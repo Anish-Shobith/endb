@@ -53,7 +53,7 @@ module.exports = {
         try {
             return require(module);
         } catch (err) {
-            throw new Error(`"npm i ${module}"`);
+            throw new Error(`Run "npm i ${module}" to install the package`);
         }
     }
 }

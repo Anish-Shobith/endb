@@ -23,12 +23,21 @@ class Endb extends EventEmitter {
      * @param {number} [options.keySize] The size of the key. (SQL database)
      * @example
      * const Endb = require('endb');
-     * const db = new Endb();
+     * const db = new Endb(); // memory (Map)
      * const db = new Endb({
      *     namespace: 'endb',
      *     serialize: JSON.stringify,
      *     deserialize: JSON.parse
      * });
+     * const db = new Endb('redis://user:pass@localhost:6379');
+     * const db = new Endb('mongodb://user:pass@localhost:27017/dbname');
+     * const db = new Endb('sqlite://path/to/database.sqlite');
+     * const db = new Endb('postgresql://user:pass@localhost:5432/dbname');
+     * const db = new Endb('mysql://user:pass@localhost:3306/dbname');
+     * 
+     * // Namespaces
+     * const users = new Endb('redis://user:pass@localhost:6379', { namespace: 'users' });
+     * const cache = new Endb('redis://user:pass@localhost:6379', { namespace: 'cache' });
      */
     constructor(uri, options = {}) {
         super();

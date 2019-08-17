@@ -1,7 +1,8 @@
 'use strict';
 
 const SqlDialect = require('./sql');
-const Pool = require('pg').Pool;
+const { safeRequire } = require('../util');
+const { Pool } = safeRequire('pg');
 
 class PostgresDialect extends SqlDialect {
     constructor(options) {

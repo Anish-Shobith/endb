@@ -27,7 +27,6 @@
     "dependencies": {},
     "devDependencies": {
         "better-docs": "^1.1.6",
-        "jsdoc": "^3.6.3",
-        "typescript": "^3.5.3"
+        "jsdoc": "^3.6.3"
     }
 }

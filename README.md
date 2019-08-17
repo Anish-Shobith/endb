@@ -28,6 +28,10 @@ By default, data is stored in the memory, you can optionally install a dialect.
 ```
 $ npm install --save redis
 $ npm install --save mongojs # MongoDB
+
+# To use SQL database, install an additional 'sql' package and the dialect
+$ npm install --save sql # Must install to use SQL database
+
 $ npm install --save sqlite3
 $ npm install --save pg # Postgres
 $ npm install --save mysql2
