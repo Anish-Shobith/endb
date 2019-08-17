@@ -1,98 +1,59 @@
-'use strict';
+'use strict'
 
 module.exports = {
-    arrayify: function (array) {
-        return Array.isArray(array) ? array : [array];
-    },
-    cloneObject: function (obj) {
-        return Object.assign(Object.create(obj), obj);
-    },
-    DataTypes: {
-        BIGINT: 'BIGINT',
-        BLOB: 'BLOB',
-        BOOLEAN: 'INTEGER',
-        CHAR: 'CHAR',
-        DATE: 'DATETIME',
-        DECIMAL: 'DECIMAL',
-        DOUBLE: 'DOUBLE PRECISION',
-        ENUM: 'TEXT',
-        FLOAT: 'FLOAT',
-        INTEGER: 'INTEGER',
-        JSON: 'JSON',
-        NULL: 'NULL',
-        NUMBER: 'INT(11)',
-        REAL: 'REAL',
-        SMALLINT: 'SMALLINT',
-        STRING: 'VARCHAR(255)',
-        TEXT: 'TEXT',
-        TINYINT: 'TINYINT',
-        UUID: 'UUID'
-    },
-    delayFor: function (ms) {
-        return new Promise(resolve => {
-            setTimeout(resolve, ms);
-        });
-    },
-    deprecate: function (message) {
-        const deprecations = new Set();
-        if (!deprecations.has(message)) {
-            deprecations.add(message);
-            console.warn(message);
+    stringify: function(obj) {
+        if ('undefined' == typeof obj) return obj;
+        if (obj && Buffer.isBuffer(obj)) {
+            return JSON.stringify(':base64:' + obj.toString('base64'));
         }
-    },
-    isNumeric: function (num) {
-        return !isNaN(parseFloat(num)) && isFinite(num);
-    },
-    limit: function (properties) {
-        if (!('_limit' in properties)) {
-            return '';
-        }
-        return `LIMIT @_limit${'_offset' in PromiseRejectionEvent ? ' OFFSET @_offset' : ''}`;
-    },
-    mergeDefault: function (def = {}, given) {
-        if (!given) return def;
-        for (const key in def) {
-            if (!Object.prototype.hasOwnProperty.call(given, key) || given[key] === undefined) {
-                given[key] = def[key];
-            } else if (given[key] === Object(given[key])) {
-                given[key] = mergeDefault(def[key], given[key]);
+        if (obj && obj.toJSON) obj = obj.toJSON();
+        if (obj && 'object' === typeof obj) {
+            let s = '';
+            const array = Array.isArray(obj);
+            s = array ? '[' : '{';
+            let first = true;
+            for (const k in obj) {
+                const ignore = 'function' == typeof obj[k] || (!array && 'undefined' === typeof obj[k]);
+                if (Object.hasOwnProperty.call(obj, k) && !ignore) {
+                    if (!first) s += ',';
+                    first = false;
+                    if (array) {
+                        if (obj[k] == undefined) {
+                            s += 'null';
+                        } else {
+                            s += stringify(obj[k]);
+                        }
+                    } else if (obj[k] !== void(0)) {
+                        s += stringify(k) + ':' + stringify(obj[k]);
+                    }
+                }
             }
+            s += array ? ']' : '}';
+            return s;
+        } else if ('string' === typeof obj) {
+            return JSON.stringify(/^:/.test(obj) ? ':' + obj : obj);
+        } else if ('undefined' === typeof obj) {
+            return 'null';
+        } else {
+            return JSON.stringify(obj);
         }
-        return given;
     },
-    mergeUpdate: function (properties, clause) {
-        const out = {};
-        Object.keys(properties).forEach(name => out['value_' + name] = properties[name]);
-        Object.keys(clause).forEach(name => out['clause_' + name] = clause[name]);
-        return out;
-    },
-    Operators: {
-        GREATER_THAN: '>',
-        GREATER_THAN_EQUAL: '>=',
-        NOT_EQUAL: '!=',
-        LESS_THAN: '<',
-        LESS_THAN_EQUAL: '<=',
-        LIKE: 'LIKE',
-        NOT_LIKE: 'NOT LIKE',
-        IN: 'IN',
-        NOT_IN: 'NOT IN'
-    },
-    order: function (properties) {
-        if (!properties._sort) {
-            return '';
-        }
-        const sort = this.arrayify(properties._sort).map(part => {
-            const bits = part.split(':');
-            return {
-                name: bits.shift(),
-                dir: bits.join(':').toUpperCase() === 'DESC' ? 'DESC' : 'ASC'
-            };
+    parse: function(text) {
+        return JSON.parse(text, (key, value) => {
+            if ('string' === typeof value) {
+                if (/^:base64:/.test(value))
+                    return Buffer.from(value.substring(8), 'base64');
+            } else {
+                return /^:/.test(value) ? value.substring(1) : value;
+            }
+            return value;
         });
-        return `ORDER BY ${sort.map(part => `\`${part.name}\` ${part.dir}`).join(', ')}`;
     },
-    where: function (properties, prefix) {
-        const names = Object.keys(properties).filter(k => k[0] !== '_');
-        if (names.length === 0) return '';
-        return `WHERE ${names.map(name => (`${name} = @${prefix||''}${name}`)).join(' AND ')}`;
+    safeRequire(module) {
+        try {
+            return require(module);
+        } catch (err) {
+            throw new Error(`"npm i ${module}"`);
+        }
     }
-};
+}

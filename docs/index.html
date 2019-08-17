@@ -23,6 +23,8 @@
         <div class="container">
             <nav class="navbar" role="navigation" aria-label="main navigation">
                 <div class="navbar-brand">
+                     
+                        <img src="docs/icon.png" alt="logo">
                     
                      
                         <h1 class="navbar-item">Endb</h1>
@@ -56,7 +58,7 @@
             <div class="column is-3" id="sidebarNav">
                 <div class="sidebar">
                     <nav>
-                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="Endb.html">Endb</a></li><li><a href="Model.html">Model</a></li></ul></div>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Classes</h3><ul><li><a href="Endb.html">Endb</a></li></ul></div>
                     </nav>
                 </div>
             </div>
@@ -100,53 +102,63 @@
 <a href="https://github.com/endb/endb/blob/master/LICENSE"><img src="https://badgen.net/github/license/endb/endb" alt="license"></a>
 <a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-release"></a>
 <a href="https://www.patreon.com/endb"><img src="https://img.shields.io/badge/donate-patreon-F96854.svg" alt="patreon"></a></p>
-<p>Endb is an easy-to-use Node.js ORM for SQLite3. It follows <a href="http://semver.org/">SemVer</a> and supports Node v8.9.4 or later.
+<p>Simple key-value database with multi dialect support. It follows <a href="http://semver.org/">SemVer</a> and supports LTS version of Node.js or higher.
 New to Endb? Check out the <a href="https://endb.js.org">API Reference</a></p>
 <ul>
-<li>Full transaction support</li>
 <li>High performance, efficiency, and safety</li>
-<li>Scalable</li>
-<li>Easy-to-use synchronous API (faster than an asynchronous API)</li>
+<li>Non-bloated</li>
+<li>Simple Promise-based API</li>
+<li>Suitable as a persistent key-value database</li>
+<li>Easily embeddable inside another module</li>
+<li>Handles all JSON types</li>
+<li>Supports the current active LTS version of Node.js or higher</li>
 </ul>
 <h2>Installation</h2>
 <pre class="prettyprint source"><code>npm install --save endb
 </code></pre>
-<blockquote>
-<p>If you have trouble installing, check the <a href="https://github.com/JoshuaWise/better-sqlite3/blob/master/docs/troubleshooting.md">troubleshooting guide</a></p>
-</blockquote>
-<h2>Usage</h2>
-<pre class="prettyprint source lang-js"><code>// ./models/User.js:
-const endb = require('endb');
-module.exports = endb.model('User', {
-  id: endb.Types.NUMBER,
-  username: endb.Types.STRING,
-  verified: endb.Types.BOOLEAN,
-  null: endb.Types.NULL
-});
+<p>By default, data is stored in the memory, you can optionally install a dialect.</p>
+<pre class="prettyprint source"><code>$ npm install --save redis
+$ npm install --save mongojs # MongoDB
+$ npm install --save sqlite3
+$ npm install --save pg # Postgres
+$ npm install --save mysql2
 </code></pre>
-<pre class="prettyprint source lang-js"><code>// ./index.js:
-const User = require('./models/User');
+<h2>Usage</h2>
+<pre class="prettyprint source lang-js"><code>const Endb = require('endb');
+const db = new Endb(); // memory (Map)
+const db = new Endb('redis://user:pass@localhost:6379');
+const db = new Endb('mongodb://user:pass@localhost:27017/dbname');
+const db = new Endb('sqlite://path/to/database.sqlite');
+const db = new Endb('postgresql://user:pass@localhost:5432/dbname');
+const db = new Endb('mysql://user:pass@localhost:3306/dbname');
 
-User.insert({
-  id: 123456789,
-  username: 'testuser',
-  verified: true,
-  null: null
-});
-User.find({ id: 123456789, username: 'testuser' });
-User.update({ id: 123456789 }, { verified: false });
-User.has({ id: 123456789 });
-User.delete({ username: 'testuser' });
-User.close();
+//Handles database connection error
+db.on('error', err => console.log('Connection Error', err));
+
+await db.set('foo', 'bar'); // true
+await db.get('foo'); // 'bar'
+await db.delete('foo'); // true
+await db.has('foo'); // false
+await db.clear(); // undefined
+</code></pre>
+<h3>Namespaces</h3>
+<p>You can set a namespace to avoid key collisions and namespaces allow you to clear only a certain namespace while using the same database.</p>
+<pre class="prettyprint source lang-js"><code>const users = new Endb('redis://user:pass@localhost:6379', { namespace: 'users' });
+const cache = new Endb('redis://user:pass@localhost:6379', { namespace: 'cache' });
+
+await users.set('foo', 'users'); // true
+await cache.set('foo', 'cache'); // true
+await users.get('foo'); // 'users'
+await cache.get('foo'); // 'cache'
+await users.clear(); // undefined
+await users.get('foo'); // undefined
+await cache.get('foo'); // 'cache'
 </code></pre>
 <h2>Links</h2>
 <ul>
 <li><a href="https://endb.js.org">Documentation</a></li>
-<li><a href="https://discord.gg/A9qvE3g">Discord</a></li>
 <li><a href="https://github.com/endb/endb">GitHub</a></li>
 <li><a href="https://npmjs.com/endb">NPM</a></li>
-<li><a href="https://github.com/JoshuaWise/better-sqlite3">better-sqlite3</a></li>
-<li><a href="https://wikipedia.org/wiki/Object-relational_mapping">What is ORM?</a></li>
 </ul></article>
     </section>
 
@@ -162,7 +174,7 @@ User.close();
 
 <footer class="footer">
     <div class="content has-text-centered">
-        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Aug 10 2019 21:30:05 GMT+0400 (Gulf Standard Time)</p>
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Aug 17 2019 13:19:51 GMT+0400 (Gulf Standard Time)</p>
         <p class="sidebar-created-by">
             <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
             <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>

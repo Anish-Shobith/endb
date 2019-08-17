@@ -1,7 +1,7 @@
 {
     "name": "endb",
     "version": "0.11.0",
-    "description": "Endb is an easy-to-use Node.js ORM for SQLite3.",
+    "description": "Simple key-value database with multi dialect support",
     "main": "src/index.js",
     "scripts": {
         "start": "npm run build:docs",
@@ -13,11 +13,10 @@
         "url": "git+https://github.com/endb/endb.git"
     },
     "keywords": [
-        "sql",
-        "sqlite",
-        "sqlite3",
         "database",
-        "orm"
+        "key",
+        "value",
+        "cache"
     ],
     "author": "endb <chroventer@gmail.com> (https://github.com/endb)",
     "license": "MIT",
@@ -25,15 +24,15 @@
         "url": "https://github.com/endb/endb/issues"
     },
     "homepage": "https://endb.js.org",
-    "engines": {
-        "node": ">=8.9.4"
-    },
-    "dependencies": {
-        "better-sqlite3": "^5.4.2"
-    },
+    "dependencies": {},
     "devDependencies": {
         "better-docs": "^1.1.6",
-        "docma": "^3.2.2",
-        "jsdoc": "^3.6.3"
+        "jsdoc": "^3.6.3",
+        "mongojs": "^2.6.0",
+        "mysql2": "^1.6.5",
+        "pg": "^7.12.1",
+        "redis": "^2.8.0",
+        "sql": "^0.78.0",
+        "sqlite3": "^4.0.9"
     }
 }
