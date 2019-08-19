@@ -58,7 +58,7 @@ declare module 'endb' {
     constructor(options?: Options);
   }
 
-  interface Options {
+  export interface Options {
     namespace?: string,
     serialize?: Function,
     deserialize?: Function,
