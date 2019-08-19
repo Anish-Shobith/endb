@@ -87,7 +87,7 @@ class Endb extends EventEmitter {
 
     /**
      * Deletes all the elements from the database
-     * @returns {null}
+     * @returns {Promise<void>}
      * @example
      * Endb.clear();
      */
@@ -98,7 +98,7 @@ class Endb extends EventEmitter {
     /**
      * Deletes a key of an element
      * @param {string|number} key The key of an element
-     * @returns {boolean} Whether or not, the key has been deleted
+     * @returns {Promise<true>} Whether or not, the key has been deleted
      * @example
      * Endb.delete('key');
      */
@@ -109,7 +109,7 @@ class Endb extends EventEmitter {
 
     /**
      * Deletes all the elements from the database
-     * @returns {Object}
+     * @returns {Promise<void>}
      * @example
      * Endb.deleteAll();
      */
