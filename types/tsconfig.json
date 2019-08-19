@@ -1,13 +1,12 @@
 {
     "compilerOptions": {
-        "target": "es5",
+        "target": "es6",
         "module": "commonjs",
         "noEmit": true,
         "strict": true,
         "noImplicitAny": true,
         "strictNullChecks": true,
-        "noImplicitThis": true,
-        "moduleResolution": "node"
+        "forceConsistentCasingInFileNames": true
     },
     "files": [
         "index.d.ts"
