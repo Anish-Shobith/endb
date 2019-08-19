@@ -1,7 +1,7 @@
 'use strict';
 
 const SqlDialect = require('./sql');
-const { safeRequire } = require('../util');
+const safeRequire = require('../util/safeRequire');
 const mysql = safeRequire('mysql2/promise');
 
 class MysqlDialect extends SqlDialect {

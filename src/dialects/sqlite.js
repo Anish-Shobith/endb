@@ -1,6 +1,6 @@
 'use strict';
 
-const { safeRequire } = require('../util');
+const safeRequire = require('../util/safeRequire');
 const SqlDialect = require('./sql');
 const { Database } = safeRequire('sqlite3');
 const { promisify } = require('util');

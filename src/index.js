@@ -1,7 +1,8 @@
 'use strict';
 
 const EventEmitter = require('events');
-const util = require('./util');
+const parse = require('./util/parse');
+const stringify = require('./util/stringify');
 
 /**
  * @class
@@ -43,8 +44,8 @@ class Endb extends EventEmitter {
         super();
         this.options = Object.assign({
             namespace: 'endb',
-            serialize: util.stringify,
-            deserialize: util.parse
+            serialize: stringify,
+            deserialize: parse
         }, (typeof uri === 'string') ? { uri } : uri, options);
         let Dialect;
         switch (this.getDialect()) {
@@ -170,4 +171,3 @@ class Endb extends EventEmitter {
 }
 
 module.exports = Endb;
-module.exports.util = util;

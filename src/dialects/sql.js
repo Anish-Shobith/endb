@@ -1,7 +1,7 @@
 'use strict';
 
 const EventEmitter = require('events');
-const { safeRequire } = require('../util');
+const safeRequire = require('../util/safeRequire');
 const { Sql } = safeRequire('sql');
 
 class SqlDialect extends EventEmitter {
