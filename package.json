@@ -1,6 +1,6 @@
 {
     "name": "endb",
-    "version": "0.13.0",
+    "version": "0.13.1",
     "description": "Simple key-value database with multi dialect support",
     "main": "src/index.js",
     "scripts": {
