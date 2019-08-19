@@ -484,7 +484,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line33">line 33</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line42">line 42</a>
             </span>
         </p>
     
@@ -512,7 +512,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const Endb = require('endb');const db = new Endb();const db = new Endb({    namespace: 'endb',    serialize: JSON.stringify,    deserialize: JSON.parse});</code></pre>
+    <pre class="prettyprint"><code>const Endb = require('endb');const db = new Endb(); // memory (Map)const db = new Endb({    namespace: 'endb',    serialize: JSON.stringify,    deserialize: JSON.parse});const db = new Endb('redis://user:pass@localhost:6379');const db = new Endb('mongodb://user:pass@localhost:27017/dbname');const db = new Endb('sqlite://path/to/database.sqlite');const db = new Endb('postgresql://user:pass@localhost:5432/dbname');const db = new Endb('mysql://user:pass@localhost:3306/dbname');// Namespacesconst users = new Endb('redis://user:pass@localhost:6379', { namespace: 'users' });const cache = new Endb('redis://user:pass@localhost:6379', { namespace: 'cache' });</code></pre>
 
 
 </div>
@@ -547,7 +547,7 @@
     <h4 class="name" id="clear">
         
         <span class="code-name">
-            clear<span class="signature">()</span><span class="type-signature"> &rarr; {null}</span>
+            clear<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
         </span>
     </h4>
     
@@ -608,7 +608,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line85">line 85</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line94">line 94</a>
             </span>
         </p>
     
@@ -643,7 +643,7 @@
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type">null</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </div>
@@ -670,7 +670,7 @@
     <h4 class="name" id="delete">
         
         <span class="code-name">
-            delete<span class="signature">(key)</span><span class="type-signature"> &rarr; {boolean}</span>
+            delete<span class="signature">(key)</span><span class="type-signature"> &rarr; {Promise.&lt;true>}</span>
         </span>
     </h4>
     
@@ -784,7 +784,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line96">line 96</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line105">line 105</a>
             </span>
         </p>
     
@@ -821,7 +821,7 @@
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type">boolean</span>
+<span class="param-type">Promise.&lt;true></span>
 
 
     </div>
@@ -848,7 +848,7 @@
     <h4 class="name" id="deleteAll">
         
         <span class="code-name">
-            deleteAll<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span>
+            deleteAll<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;void>}</span>
         </span>
     </h4>
     
@@ -909,7 +909,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line107">line 107</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line116">line 116</a>
             </span>
         </p>
     
@@ -944,7 +944,7 @@
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type">Object</span>
+<span class="param-type">Promise.&lt;void></span>
 
 
     </div>
@@ -1142,7 +1142,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line119">line 119</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line128">line 128</a>
             </span>
         </p>
     
@@ -1267,7 +1267,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line132">line 132</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line141">line 141</a>
             </span>
         </p>
     
@@ -1465,7 +1465,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line151">line 151</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line160">line 160</a>
             </span>
         </p>
     
@@ -1544,7 +1544,7 @@
 
 <footer class="footer">
     <div class="content has-text-centered">
-        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Aug 17 2019 04:38:34 GMT-0700 (Pacific Daylight Time)</p>
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sun Aug 18 2019 23:30:47 GMT-0700 (Pacific Daylight Time)</p>
         <p class="sidebar-created-by">
             <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
             <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>
