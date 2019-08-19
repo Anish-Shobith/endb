@@ -11,7 +11,7 @@ declare module 'endb' {
     public deleteAll(): Promise<void>;
     public get(key: string | number): Promise<any>;
     public getDialect(): string;
-    public set(key: strging | number, value: any): Promise<boolean>
+    public set(key: string | number, value: any): Promise<boolean>;
     private _prefixKey(key: string | number): string;
   }
   
