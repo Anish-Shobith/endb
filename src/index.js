@@ -121,7 +121,6 @@ class Endb extends EventEmitter {
     /**
      * Gets the value of a specified key
      * @param {string|number} key The key of the element
-     * @param {Object} [options={}] The options for the get
      * @returns {Promise<*>} The value of the key.
      * @example
      * Endb.get('key').then(console.log).catch(console.error);

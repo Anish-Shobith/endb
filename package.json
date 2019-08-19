@@ -26,7 +26,15 @@
     "homepage": "https://endb.js.org",
     "dependencies": {},
     "devDependencies": {
+        "@types/node": "^12.7.2",
         "better-docs": "^1.1.6",
-        "jsdoc": "^3.6.3"
+        "jsdoc": "^3.6.3",
+        "mongojs": "^2.6.0",
+        "mysql2": "^1.6.5",
+        "pg": "^7.12.1",
+        "redis": "^2.8.0",
+        "sql": "^0.78.0",
+        "sqlite3": "^4.1.0",
+        "typescript": "^3.5.3"
     }
 }
