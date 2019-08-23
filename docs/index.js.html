@@ -81,12 +81,12 @@
             <pre class="prettyprint source linenums"><code>'use strict';
 
 const EventEmitter = require('events');
-const { stringify, parse } = require('./util');
+const { load, parse, stringify } = require('./util');
 
 /**
  * @class
  * @classdesc
- * Simple key-value database with multi dialect support.
+ * Simple key-value database with multi adapter support.
  */
 class Endb extends EventEmitter {
 
@@ -97,13 +97,12 @@ class Endb extends EventEmitter {
      * @param {string} [options.namespace] The name of the database. (Default: endb)
      * @param {Function} [options.serialize] A custom serialization function.
      * @param {Function} [options.deserialize] A custom deserialization function.
-     * @param {string} [options.dialect] The dialect to be used.
+     * @param {string} [options.adapter] The adapter to be used.
      * @param {string} [options.collection] The name of the collection. (MongoDB)
      * @param {string} [options.table] The name of the table. (SQL database)
      * @param {number} [options.keySize] The size of the key. (SQL database)
      * @example
-     * const Endb = require('endb');
-     * const db = new Endb(); // memory (Map)
+     * const db = new Endb(); // Memory
      * const db = new Endb({
      *     namespace: 'endb',
      *     serialize: JSON.stringify,
@@ -114,7 +113,7 @@ class Endb extends EventEmitter {
      * const db = new Endb('sqlite://path/to/database.sqlite');
      * const db = new Endb('postgresql://user:pass@localhost:5432/dbname');
      * const db = new Endb('mysql://user:pass@localhost:3306/dbname');
-     * 
+     *
      * // Namespaces
      * const users = new Endb('redis://user:pass@localhost:6379', { namespace: 'users' });
      * const cache = new Endb('redis://user:pass@localhost:6379', { namespace: 'cache' });
@@ -126,43 +125,23 @@ class Endb extends EventEmitter {
             serialize: stringify,
             deserialize: parse
         }, (typeof uri === 'string') ? { uri } : uri, options);
-        let Dialect;
-        switch (this.getDialect()) {
-            case 'mongodb':
-                Dialect = require('./dialects/mongodb');
-                break;
-            case 'mongo':
-                Dialect = require('./dialects/mongodb');
-                break;
-            case 'postgres':
-                Dialect = require('./dialects/postgres');
-                break;
-            case 'postgresql':
-                Dialect = require('./dialects/postgres');
-                break;
-            case 'redis':
-                Dialect = require('./dialects/redis');
-                break;
-            case 'sqlite':
-                Dialect = require('./dialects/sqlite');
-                break;
-            case 'sqlite3':
-                Dialect = require('./dialects/sqlite');
-                break;
-            case 'mysql':
-                Dialect = require('./dialects/mysql');
-                break;
-            default:
-                Dialect = new Map();
-                break;
+        if (!this.adapter) {
+            const opts = Object.assign({}, this.options);
+            this.adapter = load(opts);
         }
-        if (Dialect instanceof Map) {
-            this.dialect = Dialect;
-        } else {
-            this.dialect = new Dialect(this.options);
+        if (typeof this.adapter.on === 'function') {
+            this.adapter.on('error', err => this.emit('error', err));
         }
-        if (typeof this.dialect.on == 'function') this.dialect.on('error', err => this.emit('error', err));
-        this.dialect.namespace = this.options.namespace;
+        this.adapter.namespace = this.options.namespace;
+    }
+
+    all() {
+        return Promise.resolve()
+            .then(() => this.adapter.all())
+            .then(data => {
+                data = typeof data == 'string' ? this.options.deserialize(data) : data;
+                return data === undefined ? undefined : data;
+            });
     }
 
     /**
@@ -172,7 +151,8 @@ class Endb extends EventEmitter {
      * Endb.clear();
      */
     clear() {
-        return Promise.resolve().then(() => this.dialect.clear());
+        return Promise.resolve()
+            .then(() => this.adapter.clear());
     }
 
     /**
@@ -184,17 +164,8 @@ class Endb extends EventEmitter {
      */
     delete(key) {
         key = this._prefixKey(key);
-        return Promise.resolve().then(() => this.dialect.delete(key));
-    }
-
-    /**
-     * Deletes all the elements from the database
-     * @returns {Promise&lt;void>}
-     * @example
-     * Endb.deleteAll();
-     */
-    deleteAll() {
-        return this.clear();
+        return Promise.resolve()
+            .then(() => this.adapter.delete(key));
     }
 
     /**
@@ -207,19 +178,10 @@ class Endb extends EventEmitter {
      */
     get(key) {
         key = this._prefixKey(key);
-        return Promise.resolve().then(() => this.dialect.get(key)).then(data => {
+        return Promise.resolve().then(() => this.adapter.get(key)).then(data => {
             data = typeof data == 'string' ? this.options.deserialize(data) : data;
-            if (typeof data == 'undefined') return undefined;
-            return data;
+            return data === undefined ? undefined : data;
         });
-    }
-
-    /**
-     * Gets the name of the dialect database is currently running
-     * @returns {string} The name of the dialect
-     */
-    getDialect() {
-        return this.options.dialect || /^[^:]*/.exec(this.options.uri)[0];
     }
 
     /**
@@ -239,13 +201,15 @@ class Endb extends EventEmitter {
      */
     set(key, value) {
         key = this._prefixKey(key);
-        return Promise.resolve().then(() => {
-            return this.dialect.set(key, this.options.serialize(value));
-        }).then(() => true);
+        return Promise.resolve()
+            .then(() => {
+                return this.adapter.set(key, this.options.serialize(value));
+            })
+            .then(() => true);
     }
 
     _prefixKey(key) {
-        return `${this.options.namespace}:${key}`;
+        return this.options.namespace ? `${this.options.namespace}:${key}` : key;
     }
 }
 
@@ -263,7 +227,7 @@ module.exports = Endb;</code></pre>
 
 <footer class="footer">
     <div class="content has-text-centered">
-        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sun Aug 18 2019 23:30:47 GMT-0700 (Pacific Daylight Time)</p>
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Aug 23 2019 04:17:33 GMT-0700 (Pacific Daylight Time)</p>
         <p class="sidebar-created-by">
             <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
             <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>

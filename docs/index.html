@@ -94,56 +94,63 @@
 
     <section>
         <article><h1>Endb</h1>
-<p><a href="https://www.npmjs.com/package/endb"><img src="https://badgen.net/npm/v/endb" alt="version"></a>
-<a href="https://www.npmjs.com/package/endb"><img src="https://badgen.net/npm/dt/endb" alt="downloads"></a>
-<a href="https://david-dm.org/endb/endb"><img src="https://img.shields.io/david/endb/endb.svg" alt="dependencies"></a>
-<a href="https://github.com/endb/endb"><img src="https://badgen.net/github/stars/endb/endb" alt="stars"></a>
-<a href="https://www.npmjs.com/package/endb"><img src="https://badgen.net/npm/node/endb" alt="node"></a>
-<a href="https://github.com/endb/endb/blob/master/LICENSE"><img src="https://badgen.net/github/license/endb/endb" alt="license"></a>
+<p><a href="https://www.npmjs.com/package/endb"><img src="https://badgen.net/npm/v/endb" alt="npm version"></a>
+<a href="https://www.npmjs.com/package/endb"><img src="https://badgen.net/npm/dt/endb" alt="npm downloads"></a>
+<a href="https://github.com/enhancd/endb"><img src="https://badgen.net/github/stars/enhancd/endb" alt="github stars"></a>
+<a href="https://www.npmjs.com/package/endb"><img src="https://badgen.net/npm/node/endb" alt="node version"></a>
+<a href="https://github.com/enhancd/endb/blob/master/LICENSE"><img src="https://badgen.net/github/license/enhancd/endb" alt="license"></a>
 <a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-release"></a>
-<a href="https://www.patreon.com/endb"><img src="https://img.shields.io/badge/donate-patreon-F96854.svg" alt="patreon"></a></p>
-<p>Simple key-value database with multi dialect support. It follows <a href="http://semver.org/">SemVer</a> and supports LTS version of Node.js or higher.
-New to Endb? Check out the <a href="https://endb.js.org">API Reference</a></p>
+<a href="https://www.patreon.com/endb"><img src="https://img.shields.io/badge/donate-patreon-F96854.svg" alt="patreon"></a>
+<a href="https://codecov.io/gh/enhancd/endb"><img src="https://badgen.net/codecov/c/github/enhancd/endb?icon=codecov" alt="codecov"></a></p>
+<p>Simple key-value database with multi adapter support.
+Currently, supported adapters are LevelDB, MongoDB, MySQL, PostgreSQL, Redis, and SQLite.</p>
+<p>It follows <a href="http://semver.org/">SemVer</a> and supports LTS version of Node.js or higher.</p>
+<p>New to Endb? Check out the <a href="https://endb.js.org">API Reference</a></p>
 <ul>
 <li>High performance, efficiency, and safety</li>
-<li>Non-bloated</li>
-<li>Simple Promise-based API</li>
-<li>Suitable as a persistent key-value database</li>
-<li>Easily embeddable inside another module</li>
-<li>Handles all JSON types</li>
-<li>Supports the current active LTS version of Node.js or higher</li>
+<li>Simplistic, reliable, and fast</li>
+<li>Simple <a href="#Usage">Promise-based API</a></li>
+<li>Suitable as cache or persistent key-value database</li>
+<li>Supports <a href="#Namespaces">namespaces</a></li>
+<li>Handles all JSON types including Buffer</li>
+<li>Easily embeddable inside a module</li>
 </ul>
 <h2>Installation</h2>
-<pre class="prettyprint source"><code>npm install --save endb
+<pre class="prettyprint source lang-bash"><code>npm install --save endb
 </code></pre>
-<p>By default, data is stored in the memory, you can optionally install a dialect.</p>
-<pre class="prettyprint source"><code>$ npm install --save redis
+<p>By default, data is stored in the memory. You can optionally install a adapter.</p>
+<pre class="prettyprint source lang-bash"><code>$ npm install --save level # LevelDB
+$ npm install --save redis
 $ npm install --save mongojs # MongoDB
 
-# To use SQL database, install an additional 'sql' package and the dialect
-$ npm install --save sql # Must install to use SQL database
+# To use SQL database, install an additional 'sql' package and the adapter
+$ npm install --save sql # Must install to use SQL databases
 
-$ npm install --save sqlite3
-$ npm install --save pg # Postgres
-$ npm install --save mysql2
+$ npm install --save sqlite3 # SQLite
+$ npm install --save pg # PostgreSQL
+$ npm install --save mysql2 # MySQL
 </code></pre>
 <h2>Usage</h2>
 <pre class="prettyprint source lang-js"><code>const Endb = require('endb');
-const db = new Endb(); // memory (Map)
-const db = new Endb('redis://user:pass@localhost:6379');
-const db = new Endb('mongodb://user:pass@localhost:27017/dbname');
-const db = new Endb('sqlite://path/to/database.sqlite');
-const db = new Endb('postgresql://user:pass@localhost:5432/dbname');
-const db = new Endb('mysql://user:pass@localhost:3306/dbname');
 
-//Handles database connection error
-db.on('error', err => console.log('Connection Error', err));
+// Adapters
+const endb = new Endb(); // Memory
+const endb = new Endb('leveldb://path/to/database');
+const endb = new Endb('redis://user:pass@localhost:6379');
+const endb = new Endb('mongodb://user:pass@localhost:27017/dbname');
+const endb = new Endb('sqlite://path/to/database.sqlite');
+const endb = new Endb('postgresql://user:pass@localhost:5432/dbname');
+const endb = new Endb('mysql://user:pass@localhost:3306/dbname');
 
-await db.set('foo', 'bar'); // true
-await db.get('foo'); // 'bar'
-await db.delete('foo'); // true
-await db.has('foo'); // false
-await db.clear(); // undefined
+// Handles database connection error
+endb.on('error', err => console.log('Connection Error', err));
+
+await endb.set('foo', 'bar'); // true
+await endb.get('foo'); // 'bar'
+await endb.delete('foo'); // true
+await endb.has('foo'); // false
+await endb.all(); // data: {}
+await endb.clear(); // undefined
 </code></pre>
 <h3>Namespaces</h3>
 <p>You can set a namespace to avoid key collisions and namespaces allow you to clear only a certain namespace while using the same database.</p>
@@ -158,12 +165,31 @@ await users.clear(); // undefined
 await users.get('foo'); // undefined
 await cache.get('foo'); // 'cache'
 </code></pre>
-<h2>Links</h2>
+<h3>Custom Serializers</h3>
+<p>It uses JSON buffer for serialization and derialization of data to ensure consistency.
+You can optionally pass your own (de)serialization functions to support extra data types or to (de)serialize to something other than JSON.</p>
+<pre class="prettyprint source lang-js"><code>const db = new Endb({
+    serialize: JSON.stringify,
+    deserialize: JSON.parse
+});
+</code></pre>
+<h2>Third-party Adapters</h2>
+<p>You can also use third-party adapters or build your own.
+It will integrate these storage adapters and handle complex types internally.</p>
+<pre class="prettyprint source lang-js"><code>const customAdapter = require('./custom-adapter');
+const endb = new Endb({ adapter: customAdapter });
+</code></pre>
+<p>For instance, <a href="https://github.com/sindresorhus/quick-lru"><code>quick-lru</code></a> is compatible with Endb since it implements Map.</p>
+<pre class="prettyprint source lang-js"><code>const QuickLRU = require('quick-lru');
+const endb = new Endb({ adapter: new QuickLRU({ maxSize: 1000 }) });
+</code></pre>
+<p>The following are third-party adapters compatible:</p>
 <ul>
-<li><a href="https://endb.js.org">Documentation</a></li>
-<li><a href="https://github.com/endb/endb">GitHub</a></li>
-<li><a href="https://npmjs.com/endb">NPM</a></li>
-</ul></article>
+<li><a href="https://github.com/sindresorhus/quick-lru">quick-lru</a> - Simple &quot;Least Recently Used&quot; (LRU) cache</li>
+</ul>
+<h2>License</h2>
+<p>Copyright (c) enhancd. All rights reserved.</p>
+<p>Licensed under the <a href="https://github.com/enhancd/endb/blob/master/LICENSE">MIT</a> license.</p></article>
     </section>
 
 
@@ -178,7 +204,7 @@ await cache.get('foo'); // 'cache'
 
 <footer class="footer">
     <div class="content has-text-centered">
-        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sun Aug 18 2019 23:30:47 GMT-0700 (Pacific Daylight Time)</p>
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Fri Aug 23 2019 04:17:34 GMT-0700 (Pacific Daylight Time)</p>
         <p class="sidebar-created-by">
             <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
             <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>

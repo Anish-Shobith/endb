@@ -1,60 +1,68 @@
 # Endb
 
-[![version](https://badgen.net/npm/v/endb)](https://www.npmjs.com/package/endb)
-[![downloads](https://badgen.net/npm/dt/endb)](https://www.npmjs.com/package/endb)
-[![dependencies](https://img.shields.io/david/endb/endb.svg)](https://david-dm.org/endb/endb)
-[![stars](https://badgen.net/github/stars/endb/endb)](https://github.com/endb/endb)
-[![node](https://badgen.net/npm/node/endb)](https://www.npmjs.com/package/endb)
-[![license](https://badgen.net/github/license/endb/endb)](https://github.com/endb/endb/blob/master/LICENSE)
+[![npm version](https://badgen.net/npm/v/endb)](https://www.npmjs.com/package/endb)
+[![npm downloads](https://badgen.net/npm/dt/endb)](https://www.npmjs.com/package/endb)
+[![github stars](https://badgen.net/github/stars/enhancd/endb)](https://github.com/enhancd/endb)
+[![node version](https://badgen.net/npm/node/endb)](https://www.npmjs.com/package/endb)
+[![license](https://badgen.net/github/license/enhancd/endb)](https://github.com/enhancd/endb/blob/master/LICENSE)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![patreon](https://img.shields.io/badge/donate-patreon-F96854.svg)](https://www.patreon.com/endb)
+[![codecov](https://badgen.net/codecov/c/github/enhancd/endb?icon=codecov)](https://codecov.io/gh/enhancd/endb)
 
-Simple key-value database with multi dialect support. It follows [SemVer](http://semver.org/) and supports LTS version of Node.js or higher.
+Simple key-value database with multi adapter support.
+Currently, supported adapters are LevelDB, MongoDB, MySQL, PostgreSQL, Redis, and SQLite.
+
+It follows [SemVer](http://semver.org/) and supports LTS version of Node.js or higher.
+
 New to Endb? Check out the [API Reference](https://endb.js.org)
-- High performance, efficiency, and safety
-- Non-bloated
-- Simple Promise-based API
-- Suitable as a persistent key-value database
-- Easily embeddable inside another module
-- Handles all JSON types
-- Supports the current active LTS version of Node.js or higher
+* High performance, efficiency, and safety
+* Simplistic, reliable, and fast
+* Simple [Promise-based API](#Usage)
+* Suitable as cache or persistent key-value database
+* Supports [namespaces](#Namespaces)
+* Handles all JSON types including Buffer
+* Easily embeddable inside a module
 
 ## Installation
-```
+```bash
 npm install --save endb
 ```
-
-By default, data is stored in the memory, you can optionally install a dialect.
-```
+By default, data is stored in the memory. You can optionally install a adapter.
+```bash
+$ npm install --save level # LevelDB
 $ npm install --save redis
 $ npm install --save mongojs # MongoDB
 
-# To use SQL database, install an additional 'sql' package and the dialect
-$ npm install --save sql # Must install to use SQL database
+# To use SQL database, install an additional 'sql' package and the adapter
+$ npm install --save sql # Must install to use SQL databases
 
-$ npm install --save sqlite3
-$ npm install --save pg # Postgres
-$ npm install --save mysql2
+$ npm install --save sqlite3 # SQLite
+$ npm install --save pg # PostgreSQL
+$ npm install --save mysql2 # MySQL
 ```
 
 ## Usage
 ```js
 const Endb = require('endb');
-const db = new Endb(); // memory (Map)
-const db = new Endb('redis://user:pass@localhost:6379');
-const db = new Endb('mongodb://user:pass@localhost:27017/dbname');
-const db = new Endb('sqlite://path/to/database.sqlite');
-const db = new Endb('postgresql://user:pass@localhost:5432/dbname');
-const db = new Endb('mysql://user:pass@localhost:3306/dbname');
 
-//Handles database connection error
-db.on('error', err => console.log('Connection Error', err));
+// Adapters
+const endb = new Endb(); // Memory
+const endb = new Endb('leveldb://path/to/database');
+const endb = new Endb('redis://user:pass@localhost:6379');
+const endb = new Endb('mongodb://user:pass@localhost:27017/dbname');
+const endb = new Endb('sqlite://path/to/database.sqlite');
+const endb = new Endb('postgresql://user:pass@localhost:5432/dbname');
+const endb = new Endb('mysql://user:pass@localhost:3306/dbname');
 
-await db.set('foo', 'bar'); // true
-await db.get('foo'); // 'bar'
-await db.delete('foo'); // true
-await db.has('foo'); // false
-await db.clear(); // undefined
+// Handles database connection error
+endb.on('error', err => console.log('Connection Error', err));
+
+await endb.set('foo', 'bar'); // true
+await endb.get('foo'); // 'bar'
+await endb.delete('foo'); // true
+await endb.has('foo'); // false
+await endb.all(); // data: {}
+await endb.clear(); // undefined
 ```
 
 ### Namespaces
@@ -72,7 +80,32 @@ await users.get('foo'); // undefined
 await cache.get('foo'); // 'cache'
 ```
 
-## Links
-- [Documentation](https://endb.js.org)
-- [GitHub](https://github.com/endb/endb)
-- [NPM](https://npmjs.com/endb)
+### Custom Serializers
+It uses JSON buffer for serialization and derialization of data to ensure consistency.
+You can optionally pass your own (de)serialization functions to support extra data types or to (de)serialize to something other than JSON.
+```js
+const db = new Endb({
+    serialize: JSON.stringify,
+    deserialize: JSON.parse
+});
+```
+
+## Third-party Adapters
+You can also use third-party adapters or build your own.
+It will integrate these storage adapters and handle complex types internally.
+```js
+const customAdapter = require('./custom-adapter');
+const endb = new Endb({ adapter: customAdapter });
+```
+For instance, [`quick-lru`](https://github.com/sindresorhus/quick-lru) is compatible with Endb since it implements Map.
+```js
+const QuickLRU = require('quick-lru');
+const endb = new Endb({ adapter: new QuickLRU({ maxSize: 1000 }) });
+```
+The following are third-party adapters compatible:
+* [quick-lru](https://github.com/sindresorhus/quick-lru) - Simple "Least Recently Used" (LRU) cache
+
+## License
+Copyright (c) enhancd. All rights reserved.
+
+Licensed under the [MIT](https://github.com/enhancd/endb/blob/master/LICENSE) license.
