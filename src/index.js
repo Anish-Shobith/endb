@@ -4,9 +4,9 @@ const EventEmitter = require('events');
 const { load, parse, stringify } = require('./util');
 
 /**
- * @class
- * @classdesc
- * Simple key-value database with multi adapter support.
+ * @class Endb
+ * @classdesc Simple key-value database with multi adapter support.
+ * @extends EventEmitter
  */
 class Endb extends EventEmitter {
 
@@ -28,15 +28,12 @@ class Endb extends EventEmitter {
      *     serialize: JSON.stringify,
      *     deserialize: JSON.parse
      * });
+     * const endb = new Endb('leveldb://path/to/database');
      * const db = new Endb('redis://user:pass@localhost:6379');
      * const db = new Endb('mongodb://user:pass@localhost:27017/dbname');
      * const db = new Endb('sqlite://path/to/database.sqlite');
      * const db = new Endb('postgresql://user:pass@localhost:5432/dbname');
      * const db = new Endb('mysql://user:pass@localhost:3306/dbname');
-     *
-     * // Namespaces
-     * const users = new Endb('redis://user:pass@localhost:6379', { namespace: 'users' });
-     * const cache = new Endb('redis://user:pass@localhost:6379', { namespace: 'cache' });
      */
     constructor(uri, options = {}) {
         super();
@@ -55,6 +52,12 @@ class Endb extends EventEmitter {
         this.adapter.namespace = this.options.namespace;
     }
 
+    /**
+     * Gets all the elements (keys and values) from the database.
+     * @returns {Promise<Object>}
+     * @example
+     * Endb.all().then(console.log).catch(console.error);
+     */
     all() {
         return Promise.resolve()
             .then(() => this.adapter.all())
@@ -65,10 +68,10 @@ class Endb extends EventEmitter {
     }
 
     /**
-     * Deletes all the elements from the database
+     * Deletes all the elements (keys and values) from the database.
      * @returns {Promise<void>}
      * @example
-     * Endb.clear();
+     * Endb.clear().then(console.log).catch(console.error);
      */
     clear() {
         return Promise.resolve()
@@ -76,11 +79,11 @@ class Endb extends EventEmitter {
     }
 
     /**
-     * Deletes a key of an element
-     * @param {string|number} key The key of an element
-     * @returns {Promise<true>} Whether or not, the key has been deleted
+     * Deletes an element (key and value) from the database.
+     * @param {string|number} key The key of an element.
+     * @returns {Promise<true>} Whether or not, the key has been deleted.
      * @example
-     * Endb.delete('key');
+     * Endb.delete('key').then(console.log).catch(console.error);
      */
     delete(key) {
         key = this._prefixKey(key);
@@ -89,26 +92,28 @@ class Endb extends EventEmitter {
     }
 
     /**
-     * Gets the value of a specified key
-     * @param {string|number} key The key of the element
-     * @param {Object} [options={}] The options for the get
-     * @returns {Promise<*>} The value of the key.
+     * Gets an element (key and value) specified from the database.
+     * @param {string|number} key The key of the element.
+     * @param {Object} [options={}] The options for the get.
+     * @returns {Promise<*>} The value of the element.
      * @example
      * Endb.get('key').then(console.log).catch(console.error);
      */
     get(key) {
         key = this._prefixKey(key);
-        return Promise.resolve().then(() => this.adapter.get(key)).then(data => {
-            data = typeof data == 'string' ? this.options.deserialize(data) : data;
-            return data === undefined ? undefined : data;
-        });
+        return Promise.resolve()
+            .then(() => this.adapter.get(key))
+            .then(data => {
+                data = typeof data == 'string' ? this.options.deserialize(data) : data;
+                return data === undefined ? undefined : data;
+            });
     }
 
     /**
-     * Sets an element containing a key and a value
-     * @param {string|number} key The key of the element
-     * @param {*} value The value of the element
-     * @returns {Promise<boolean>} An object containing the value
+     * Sets an element (key and a value) to the database.
+     * @param {string|number} key The key of the element.
+     * @param {*} value The value of the element.
+     * @returns {Promise<boolean>} Whether or not, the element has been assigned.
      * @example
      * Endb.set('key', 'value').then(console.log).catch(console.error);
      * Endb.set('userExists', true).then(console.log).catch(console.error);

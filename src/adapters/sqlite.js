@@ -6,7 +6,7 @@ const EndbSql = require('./sql');
 const { Database } = safeRequire('sqlite3');
 
 class EndbSqlite extends EndbSql {
-    constructor(options) {
+    constructor(options = {}) {
         options = Object.assign({
             dialect: 'sqlite',
             uri: 'sqlite://:memory:'

@@ -5,7 +5,7 @@ const { safeRequire } = require('../util');
 const { Pool } = safeRequire('pg');
 
 class EndbPostgres extends EndbSql {
-    constructor(options) {
+    constructor(options = {}) {
         options = Object.assign({
             dialect: 'postgres',
             uri: 'postgresql://localhost:5432'
