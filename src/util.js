@@ -77,10 +77,10 @@ class Util {
                         if (obj[k] == undefined) {
                             s += 'null';
                         } else {
-                            s += stringify(obj[k]);
+                            s += Util.stringify(obj[k]);
                         }
                     } else if (obj[k] !== void(0)) {
-                        s += stringify(k) + ':' + stringify(obj[k]);
+                        s += Util.stringify(k) + ':' + Util.stringify(obj[k]);
                     }
                 }
             }

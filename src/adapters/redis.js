@@ -17,21 +17,21 @@ class EndbRedis extends EventEmitter {
             obj[method] = promisify(client[method].bind(client));
             return obj;
         }, {});
-        client.on('error', err => this.emit('error', err));
+        client.on('error', (err) => this.emit('error', err));
     }
 
     all() {
         return this.db.keys('*')
-            .then(keys => {
-                for (let i = 0; i < keys.length; i++) {
-                    return keys[i] === null ? undefined : keys[i];
+            .then(data => {
+                for (let i = 0; i < data.length; i++) {
+                    return data[i] === null ? null : data[i];
                 }
             });
     }
 
     clear() {
         return this.db.smembers(this._prefixNamespace())
-            .then(keys => this.db.del.apply(null, keys.concat(this._prefixNamespace())))
+            .then(data => this.db.del.apply(null, data.concat(this._prefixNamespace())))
             .then(() => undefined);
     }
 
@@ -46,7 +46,7 @@ class EndbRedis extends EventEmitter {
     get(key) {
         return this.db.get(key)
             .then(data => {
-                return data === null ? undefined : data;
+                return data === null ? null : data;
             });
     }
 

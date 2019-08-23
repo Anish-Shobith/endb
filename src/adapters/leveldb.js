@@ -12,7 +12,7 @@ class EndbLevel extends EventEmitter {
             uri: 'leveldb://endb'
         }, typeof uri === 'string' ? { uri } : uri, options);
         options.path = options.uri.replace(/^leveldb:\/\//, '');
-        const level = new Level(options.path, options, err => this.emit('error', err));
+        const level = new Level(options.path, options, (err) => this.emit('error', err));
         this.db = ['del', 'createKeyStream', 'createReadStream', 'get', 'put'].reduce((obj, method) => {
             obj[method] = promisify(level[method].bind(level));
             return obj;
@@ -21,8 +21,8 @@ class EndbLevel extends EventEmitter {
 
     all() {
         return this.db.createReadStream().then(stream => {
-            stream.on('data', data => {
-                return data === null ? undefined : data;
+            stream.on('data', (data) => {
+                return data === null ? null : data;
             });
         });
     }
@@ -30,7 +30,7 @@ class EndbLevel extends EventEmitter {
     clear() {
         return this.db.createKeyStream()
             .then(stream => {
-                stream.on('data', async data => {
+                stream.on('data', async (data) => {
                     await this.db.del(data);
                 });
             });
@@ -44,8 +44,7 @@ class EndbLevel extends EventEmitter {
     get(key) {
         return this.db.get(key)
             .then(data => {
-                if (data === null) return null;
-                return data;
+                return data === null ? null : data;
             });
     }
 

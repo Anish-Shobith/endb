@@ -7,7 +7,6 @@
 [![license](https://badgen.net/github/license/enhancd/endb)](https://github.com/enhancd/endb/blob/master/LICENSE)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![patreon](https://img.shields.io/badge/donate-patreon-F96854.svg)](https://www.patreon.com/endb)
-[![codecov](https://badgen.net/codecov/c/github/enhancd/endb?icon=codecov)](https://codecov.io/gh/enhancd/endb)
 
 Simple key-value database with multi adapter support.
 Currently, supported adapters are LevelDB, MongoDB, MySQL, PostgreSQL, Redis, and SQLite.
