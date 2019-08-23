@@ -6,8 +6,8 @@
     "patreon": "endb",
     "scripts": {
         "start": "npm run build:docs",
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "build:docs": "./node_modules/.bin/jsdoc -c .jsdoc.json",
+        "test": "",
+        "build:docs": "npx jsdoc -c .jsdoc.json",
         "postinstall": "patreon-postinstall || exit 0"
     },
     "repository": {
@@ -27,10 +27,11 @@
     },
     "homepage": "https://endb.js.org",
     "dependencies": {
-        "patreon-postinstall": "^1.0.0"
+        "patreon-postinstall": "^1.1.0"
     },
     "devDependencies": {
         "better-docs": "^1.1.6",
+        "jest": "^24.9.0",
         "jsdoc": "^3.6.3"
     },
     "engines": {
