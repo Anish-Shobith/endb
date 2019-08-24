@@ -1,6 +1,7 @@
 # Endb
 
 [![npm version](https://badgen.net/npm/v/endb)](https://www.npmjs.com/package/endb)
+[![build status](https://travis-ci.org/enhancd/endb.svg?branch=master)](https://travis-ci.org/enhancd/endb)
 [![npm downloads](https://badgen.net/npm/dt/endb)](https://www.npmjs.com/package/endb)
 [![github stars](https://badgen.net/github/stars/enhancd/endb)](https://github.com/enhancd/endb)
 [![node version](https://badgen.net/npm/node/endb)](https://www.npmjs.com/package/endb)
