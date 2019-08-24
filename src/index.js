@@ -5,7 +5,7 @@ const { load, parse, stringify } = require('./util');
 
 /**
  * @class Endb
- * @classdesc Simple key-value database with multi adapter support.
+ * @classdesc Simple key-value database with cache and multi adapter support.
  * @extends EventEmitter
  */
 class Endb extends EventEmitter {
@@ -42,14 +42,14 @@ class Endb extends EventEmitter {
             serialize: stringify,
             deserialize: parse
         }, (typeof uri === 'string') ? { uri } : uri, options);
-        if (!this.adapter) {
+        if (!this.options.store) {
             const opts = Object.assign({}, this.options);
-            this.adapter = load(opts);
+            this.options.store = load(opts);
         }
-        if (typeof this.adapter.on === 'function') {
-            this.adapter.on('error', err => this.emit('error', err));
+        if (typeof this.options.store.on === 'function') {
+            this.options.store.on('error', err => this.emit('error', err));
         }
-        this.adapter.namespace = this.options.namespace;
+        this.options.store.namespace = this.options.namespace;
     }
 
     /**
@@ -60,7 +60,7 @@ class Endb extends EventEmitter {
      */
     all() {
         return Promise.resolve()
-            .then(() => this.adapter.all())
+            .then(() => this.options.store.all())
             .then(data => {
                 data = typeof data == 'string' ? this.options.deserialize(data) : data;
                 return data === undefined ? undefined : data;
@@ -75,7 +75,7 @@ class Endb extends EventEmitter {
      */
     clear() {
         return Promise.resolve()
-            .then(() => this.adapter.clear());
+            .then(() => this.options.store.clear());
     }
 
     /**
@@ -86,26 +86,32 @@ class Endb extends EventEmitter {
      * Endb.delete('key').then(console.log).catch(console.error);
      */
     delete(key) {
+        if (key === null) return null;
         key = this._prefixKey(key);
         return Promise.resolve()
-            .then(() => this.adapter.delete(key));
+            .then(() => this.options.store.delete(key));
     }
 
     /**
      * Gets an element (key and value) specified from the database.
      * @param {string|number} key The key of the element.
      * @param {Object} [options={}] The options for the get.
+     * @param {boolean} [options.raw=false] Get data as raw or not.
      * @returns {Promise<*>} The value of the element.
      * @example
      * Endb.get('key').then(console.log).catch(console.error);
      */
-    get(key) {
+    get(key, options = {}) {
+        if (key === null) return null;
         key = this._prefixKey(key);
         return Promise.resolve()
-            .then(() => this.adapter.get(key))
+            .then(() => this.options.store.get(key))
             .then(data => {
-                data = typeof data == 'string' ? this.options.deserialize(data) : data;
-                return data === undefined ? undefined : data;
+                data = (typeof data === 'string') ? this.options.deserialize(data) : data;
+                if (data === undefined) {
+                    return undefined;
+                }
+                return (options && options.raw) ? data : data.value;
             });
     }
 
@@ -125,16 +131,18 @@ class Endb extends EventEmitter {
      * }).then(console.log).catch(console.error);
      */
     set(key, value) {
+        if (key === null) return null;
         key = this._prefixKey(key);
         return Promise.resolve()
             .then(() => {
-                return this.adapter.set(key, this.options.serialize(value));
+                return this.options.store.set(key, this.options.serialize({ value }));
             })
             .then(() => true);
     }
 
     _prefixKey(key) {
-        return this.options.namespace ? `${this.options.namespace}:${key}` : key;
+        if (key === null) return null;
+        return `${this.options.namespace}:${key}`;
     }
 }
 

@@ -17,25 +17,10 @@ class Util {
         if (options.adapter || options.uri) {
             const adapter = options.adapter || /^[^:]*/.exec(options.uri)[0];
             if (adapters[adapter] !== undefined) {
-                const Adapter = require(adapters[adapter]);
-                return new Adapter(options);
-            } else {
-                return adapter;
+                return new (require(adapters[adapter]))(options);
             }
         }
         return new Map();
-    }
-
-    static parse(text) {
-        return JSON.parse(text, (key, value) => {
-            if ('string' === typeof value) {
-                if (/^:base64:/.test(value))
-                    return Buffer.from(value.substring(8), 'base64');
-            } else {
-                return /^:/.test(value) ? value.substring(1) : value;
-            }
-            return value;
-        });
     }
 
     static rowsToObject(rows) {
@@ -57,42 +42,43 @@ class Util {
         }
     }
 
-    static stringify(obj) {
-        if ('undefined' == typeof obj) return obj;
-        if (obj && Buffer.isBuffer(obj)) {
-            return JSON.stringify(':base64:' + obj.toString('base64'));
-        }
-        if (obj && obj.toJSON) obj = obj.toJSON();
-        if (obj && 'object' === typeof obj) {
-            let s = '';
-            const array = Array.isArray(obj);
-            s = array ? '[' : '{';
-            let first = true;
-            for (const k in obj) {
-                const ignore = 'function' == typeof obj[k] || (!array && 'undefined' === typeof obj[k]);
-                if (Object.hasOwnProperty.call(obj, k) && !ignore) {
-                    if (!first) s += ',';
-                    first = false;
-                    if (array) {
-                        if (obj[k] == undefined) {
-                            s += 'null';
-                        } else {
-                            s += Util.stringify(obj[k]);
-                        }
-                    } else if (obj[k] !== void(0)) {
-                        s += Util.stringify(k) + ':' + Util.stringify(obj[k]);
+    static parse(text) {
+        const isObject = (x) => typeof x === 'object' && x !== null;
+        const isBuffer = (x) => {
+            return (isObject(x) && x.type === 'Buffer' && (Array.isArray(x.data) || typeof x.data === 'string'));
+        };
+        return JSON.parse(text, (k, v) => {
+            if (isBuffer(v)) {
+                if (Array.isArray(v.data)) {
+                    return Buffer.from(v.data);
+                } else if (typeof v.data === 'string') {
+                    if (v.data.startsWith('base64:')) {
+                        return Buffer.from(v.data.slice('base64:'.length), 'base64');
+                    }
+                    return Buffer.from(v.data);
+                }
+            }
+            return v;
+        });
+    }
+
+    static stringify(value, space) {
+        const isObject = (x) => typeof x === 'object' && x !== null;
+        const isBuffer = (x) => {
+            return (isObject(x) && x.type === 'Buffer' && (Array.isArray(x.data) || typeof x.data === 'string'));
+        };
+        return JSON.stringify(value, (k, v) => {
+            if (isBuffer(v)) {
+                if (Array.isArray(v.data)) {
+                    if (v.data.length > 0) {
+                        v.data = `base64:${Buffer.from(v.data).toString('base64')}`;
+                    } else {
+                        v.data = '';
                     }
                 }
             }
-            s += array ? ']' : '}';
-            return s;
-        } else if ('string' === typeof obj) {
-            return JSON.stringify(/^:/.test(obj) ? ':' + obj : obj);
-        } else if ('undefined' === typeof obj) {
-            return 'null';
-        } else {
-            return JSON.stringify(obj);
-        }
+            return v;
+        }, space);
     }
 }
 
