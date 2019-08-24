@@ -8,7 +8,7 @@
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 [![patreon](https://img.shields.io/badge/donate-patreon-F96854.svg)](https://www.patreon.com/endb)
 
-Simple key-value database with multi adapter support.
+Simple key-value database with cache and multi adapter support.
 Currently, supported adapters are LevelDB, MongoDB, MySQL, PostgreSQL, Redis, and SQLite.
 
 It follows [SemVer](http://semver.org/) and supports LTS version of Node.js or higher.
@@ -60,7 +60,7 @@ await endb.set('foo', 'bar'); // true
 await endb.get('foo'); // 'bar'
 await endb.delete('foo'); // true
 await endb.has('foo'); // false
-await endb.all(); // data: {}
+await endb.all(); // { ... }
 await endb.clear(); // undefined
 ```
 
@@ -94,12 +94,12 @@ You can also use third-party adapters or build your own.
 It will integrate these storage adapters and handle complex types internally.
 ```js
 const customAdapter = require('./custom-adapter');
-const endb = new Endb({ adapter: customAdapter });
+const endb = new Endb({ store: customAdapter });
 ```
 For instance, [`quick-lru`](https://github.com/sindresorhus/quick-lru) is compatible with Endb since it implements Map.
 ```js
 const QuickLRU = require('quick-lru');
-const endb = new Endb({ adapter: new QuickLRU({ maxSize: 1000 }) });
+const endb = new Endb({ store: new QuickLRU({ maxSize: 1000 }) });
 ```
 The following are third-party adapters compatible:
 * [quick-lru](https://github.com/sindresorhus/quick-lru) - Simple "Least Recently Used" (LRU) cache
