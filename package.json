@@ -1,6 +1,6 @@
 {
     "name": "endb",
-    "version": "0.13.3",
+    "version": "0.14.0",
     "description": "Simple key-value database with cache and multi adapter support.",
     "main": "src/index.js",
     "patreon": "endb",
