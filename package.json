@@ -32,14 +32,7 @@
     "devDependencies": {
         "ava": "^2.3.0",
         "better-docs": "^1.1.6",
-        "jsdoc": "^3.6.3",
-        "level": "^5.0.1",
-        "mongojs": "^2.6.0",
-        "mysql2": "^1.6.5",
-        "pg": "^7.12.1",
-        "redis": "^2.8.0",
-        "sql": "^0.78.0",
-        "sqlite3": "^4.1.0"
+        "jsdoc": "^3.6.3"
     },
     "engines": {
         "node": ">=8.0.0"
