@@ -1,7 +1,11 @@
 language: node_js
-
 branches:
-  only:
-  - master
-
+- master
 node_js: 8.0.0
+deploy:
+  provider: npm
+  email: chroventer@gmail.com
+  api_key:
+    secure: S4LMnfTgzS8uhiS2QaQuojStNWXbHps4kLwo7SC+7JzXcSg2eAfKGozZyw4FdzCNFi5ApYkodMIH+RSZEFsO48QOpdmZK5L/KXuFHv/83PttSZnhhJGp49FKrHQoQ03doajStZDUH6v7Ta7Gdn19GGtHhgyX5rzmOH3geCQZASYwdV3hsOizCQeVOa4736dFmJssEIle9+SDifUkChOmDfy/t5xhwG6RhSILnSZOO5EUAnolZSc1pHkUsDMRFpnYABY3ktORW8JqBP4rWM6ba+eQITQYbwznQ2kfG5eMX0TqNpAO47fZohr1+cW+jj17xiO9QwxJ+4A6NZ2CCpji8z4b1HszZ1nGfF2VgUvEYRTxKZ2D3BkNICOEUZY6j8LS8Z2mrXvtXBdc7/iEq3geQDlC0G87fclAG5yh54XyAPjPbwBD3HiNv6fjA65rbhioCroRLj0KH0pDVgpsZ8Lssm+yfx+GuksPC+g2Eci6tZH/yATM7cHOQPOxveX8SvVnXUgb+QHjHpwo8hkLlClTAF+Kj/BVKMWV7dNHZo8Rm1bAU4T6VgunmJJR8B4OogsW4Ou1Na0lEyblb0AGIxHQfbhHyhdDFpzXk92GzOonFM0p3sEjf4snFWvsItWipFb8jOcdPw+5sNDs+Nmr3JAED1E0tOZrEAKacU+lsP7OGtU=
+  on:
+    repo: enhancd/endb
