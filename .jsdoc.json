@@ -1,14 +1,22 @@
 {
-    "plugins": ["plugins/markdown", "plugins/summarize"],
+    "plugins": [
+        "plugins/markdown",
+        "plugins/summarize"
+    ],
     "source": {
-        "include": ["src", "README.md"],
+        "include": [
+            "src",
+            "README.md"
+        ],
         "includePattern": ".js$",
-        "excludePattern": "(node_modules/|docs)"
+        "excludePattern": "(node_modules/|docs/|test/)"
     },
     "sourceType": "module",
     "tags": {
         "allowUnknownTags": true,
-        "dictionaries": ["jsdoc"]
+        "dictionaries": [
+            "jsdoc"
+        ]
     },
     "opts": {
         "template": "./node_modules/better-docs",
@@ -26,7 +34,8 @@
         "better-docs": {
             "name": "Endb",
             "logo": "./docs/icon.png",
-            "navigation": [{
+            "navigation": [
+                {
                     "label": "GitHub",
                     "href": "https://github.com/endb/endb"
                 },
