@@ -1,7 +1,25 @@
 'use strict';
 
 const EventEmitter = require('events');
-const { load, parse, stringify } = require('./util');
+const { parse, stringify } = require('./util');
+
+const load = (options = {}) => {
+	const adapters = {
+		level: './adapters/leveldb',
+		mongo: './adapters/mongodb',
+		mysql: './adapters/mysql',
+		postgres: './adapters/postgres',
+		redis: './adapters/redis',
+		sqlite: './adapters/sqlite'
+	};
+	if (options.adapter || options.uri) {
+		const adapter = options.adapter || /^[^:]*/.exec(options.uri)[0];
+		if (adapters[adapter] !== undefined) {
+			return new(require(adapters[adapter]))(options);
+		}
+	}
+	return new Map();
+};
 
 /**
  * @class Endb
@@ -10,7 +28,7 @@ const { load, parse, stringify } = require('./util');
  */
 class Endb extends EventEmitter {
 
-    /**
+	/**
      * @constructor
      * @param {string} [uri] The connection string URI. (Default: undefined)
      * @param {Object} [options] The options for the database. (Default: {})
@@ -35,89 +53,120 @@ class Endb extends EventEmitter {
      * const db = new Endb('postgresql://user:pass@localhost:5432/dbname');
      * const db = new Endb('mysql://user:pass@localhost:3306/dbname');
      */
-    constructor(uri, options = {}) {
-        super();
-        this.options = Object.assign({
-            namespace: 'endb',
-            serialize: stringify,
-            deserialize: parse
-        }, (typeof uri === 'string') ? { uri } : uri, options);
-        if (!this.options.store) {
-            const opts = Object.assign({}, this.options);
-            this.options.store = load(opts);
-        }
-        if (typeof this.options.store.on === 'function') {
-            this.options.store.on('error', err => this.emit('error', err));
-        }
-        this.options.store.namespace = this.options.namespace;
-    }
+	constructor(uri, options = {}) {
+		super();
+		this.options = Object.assign({
+			namespace: 'endb',
+			serialize: stringify,
+			deserialize: parse
+		}, (typeof uri === 'string') ? { uri } : uri, options);
+		if (!this.options.store) {
+			const opts = Object.assign({}, this.options);
+			this.options.store = load(opts);
+		}
+		if (typeof this.options.store.on === 'function') {
+			this.options.store.on('error', err => this.emit('error', err));
+		}
+		this.options.store.namespace = this.options.namespace;
+	}
 
-    /**
+	/**
      * Gets all the elements (keys and values) from the database.
-     * @returns {Promise<Object>}
+     * @returns {Promise<Object|any[]>} All the elements.
      * @example
      * Endb.all().then(console.log).catch(console.error);
      */
-    all() {
-        return Promise.resolve()
-            .then(() => this.options.store.all())
-            .then(data => {
-                data = typeof data == 'string' ? this.options.deserialize(data) : data;
-                return data === undefined ? undefined : data;
-            });
-    }
+	all() {
+		return Promise.resolve()
+			.then(() => {
+				if (this.options.store instanceof Map) {
+					/**
+					const array = [];
+					this.options.store.forEach(data => {
+						data = this.options.deserialize(data);
+						array.push(data);
+					});
+					return array;
+					*/
+					const array = [];
+					for (const [key, value] of this.options.store) {
+						const data = { key, value: this.options.deserialize(value).value };
+						array.push(data);
+					}
+					return array;
+				}
+				return this.options.store.all();
+			})
+			.then(data => {
+				data = typeof data == 'string' ? this.options.deserialize(data) : data;
+				return data === undefined ? undefined : data;
+			});
+	}
 
-    /**
+	/**
      * Deletes all the elements (keys and values) from the database.
-     * @returns {Promise<void>}
+     * @returns {Promise<void>} undefined
      * @example
      * Endb.clear().then(console.log).catch(console.error);
      */
-    clear() {
-        return Promise.resolve()
-            .then(() => this.options.store.clear());
-    }
+	clear() {
+		return Promise.resolve()
+			.then(() => this.options.store.clear());
+	}
 
-    /**
+	/**
      * Deletes an element (key and value) from the database.
-     * @param {string|number} key The key of an element.
+     * @param {string} key The key of an element.
      * @returns {Promise<true>} Whether or not, the key has been deleted.
      * @example
      * Endb.delete('key').then(console.log).catch(console.error);
      */
-    delete(key) {
-        if (key === null) return null;
-        key = this._prefixKey(key);
-        return Promise.resolve()
-            .then(() => this.options.store.delete(key));
-    }
+	delete(key) {
+		if (key === null || typeof key !== 'string') return null;
+		key = this._prefixKey(key);
+		return Promise.resolve()
+			.then(() => this.options.store.delete(key));
+	}
 
-    /**
+	/**
      * Gets an element (key and value) specified from the database.
-     * @param {string|number} key The key of the element.
+     * @param {string} key The key of the element.
      * @param {Object} [options={}] The options for the get.
      * @param {boolean} [options.raw=false] Get data as raw or not.
      * @returns {Promise<*>} The value of the element.
      * @example
      * Endb.get('key').then(console.log).catch(console.error);
      */
-    get(key, options = {}) {
-        if (key === null) return null;
-        key = this._prefixKey(key);
-        return Promise.resolve()
-            .then(() => this.options.store.get(key))
-            .then(data => {
-                data = (typeof data === 'string') ? this.options.deserialize(data) : data;
-                if (data === undefined) {
-                    return undefined;
-                }
-                return (options && options.raw) ? data : data.value;
-            });
-    }
+	get(key, options = {}) {
+		if (key === null || typeof key !== 'string') return null;
+		key = this._prefixKey(key);
+		return Promise.resolve()
+			.then(() => this.options.store.get(key))
+			.then(data => {
+				data = (typeof data === 'string') ? this.options.deserialize(data) : data;
+				if (data === undefined) {
+					return undefined;
+				}
+				return (options && options.raw) ? data : data.value;
+			});
+	}
 
-    /**
+	/**
+     * Checks if the database has the element.
+     * @param {string} key The key of the element.
+     * @returns {boolean} Whether or not, the element exists
+     * @example
+     * Endb.has('key').then(console.log).catch(console.error);
+     */
+	has(key) {
+		if (key === null || typeof key !== 'string') return null;
+		const data = this.get(key);
+		return data ? true : false;
+	}
+
+	/**
      * Sets an element (key and a value) to the database.
-     * @param {string|number} key The key of the element.
+     * @param {string} key The key of the element.
      * @param {*} value The value of the element.
      * @returns {Promise<boolean>} Whether or not, the element has been assigned.
      * @example
@@ -130,20 +179,22 @@ class Endb extends EventEmitter {
      *   verified: true
      * }).then(console.log).catch(console.error);
      */
-    set(key, value) {
-        if (key === null) return null;
-        key = this._prefixKey(key);
-        return Promise.resolve()
-            .then(() => {
-                return this.options.store.set(key, this.options.serialize({ value }));
-            })
-            .then(() => true);
-    }
+	set(key, value) {
+		if (key === null || typeof key !== 'string') return null;
+		key = this._prefixKey(key);
+		return Promise.resolve()
+			.then(() => {
+				return this.options.store.set(key, this.options.serialize({ value }));
+			})
+			.then(() => true);
+	}
 
-    _prefixKey(key) {
-        if (key === null) return null;
-        return `${this.options.namespace}:${key}`;
-    }
+	_prefixKey(key) {
+		if (key === null) return null;
+		return this.options.namespace ? `${this.options.namespace}:${key}` : key;
+	}
 }
 
 module.exports = Endb;
+module.exports.parse = parse;
+module.exports.stringify = stringify;
