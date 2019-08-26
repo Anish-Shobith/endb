@@ -1,85 +1,53 @@
 'use strict';
 
 class Util {
-    constructor() {
-        throw new Error('Util must not be constructed');
-    }
+	constructor() {
+		throw new Error('Util class cannot be constructed');
+	}
 
-    static load(options = {}) {
-        const adapters = {
-            level: './adapters/leveldb',
-            mongo: './adapters/mongodb',
-            mysql: './adapters/mysql',
-            postgres: './adapters/postgres',
-            redis: './adapters/redis',
-            sqlite: './adapters/sqlite'
-        };
-        if (options.adapter || options.uri) {
-            const adapter = options.adapter || /^[^:]*/.exec(options.uri)[0];
-            if (adapters[adapter] !== undefined) {
-                return new (require(adapters[adapter]))(options);
-            }
-        }
-        return new Map();
-    }
+	static safeRequire(id) {
+		try {
+			return require(id);
+		} catch (err) {
+			console.error('\x1b[2m\x1b[32m%s\x1b[0m', `To continue, you'll have to install ${id}. Run "npm install ${id}" to install it.`);
+			return false;
+		}
+	}
 
-    static rowsToObject(rows) {
-        const r = {};
-        for (const i in rows) {
-            const row = rows[i];
-            const key = row.key;
-            r[key] = row.value;
-        }
-        return r;
-    }
+	static parse(text) {
+		return JSON.parse(text, (k, v) => {
+			if (Util.isBufferLike(v)) {
+				if (Array.isArray(v.data)) {
+					return Buffer.from(v.data);
+				} else if (typeof v.data === 'string') {
+					if (v.data.startsWith('base64:')) {
+						return Buffer.from(v.data.slice('base64:'.length), 'base64');
+					}
+					return Buffer.from(v.data);
+				}
+			}
+			return v;
+		});
+	}
 
-    static safeRequire(id) {
-        try {
-            return require(id);
-        } catch (err) {
-            console.log('\x1b[1m\x1b[31m%s\x1b[0m', `To continue, you'll have to install ${id}. Run "npm install ${id}" to install it.`);
-            return false;
-        }
-    }
+	static stringify(value, space) {
+		return JSON.stringify(value, (k, v) => {
+			if (Util.isBufferLike(v)) {
+				if (Array.isArray(v.data)) {
+					if (v.data.length > 0) {
+						v.data = `base64:${Buffer.from(v.data).toString('base64')}`;
+					} else {
+						v.data = '';
+					}
+				}
+			}
+			return v;
+		}, space);
+	}
 
-    static parse(text) {
-        const isObject = (x) => typeof x === 'object' && x !== null;
-        const isBuffer = (x) => {
-            return (isObject(x) && x.type === 'Buffer' && (Array.isArray(x.data) || typeof x.data === 'string'));
-        };
-        return JSON.parse(text, (k, v) => {
-            if (isBuffer(v)) {
-                if (Array.isArray(v.data)) {
-                    return Buffer.from(v.data);
-                } else if (typeof v.data === 'string') {
-                    if (v.data.startsWith('base64:')) {
-                        return Buffer.from(v.data.slice('base64:'.length), 'base64');
-                    }
-                    return Buffer.from(v.data);
-                }
-            }
-            return v;
-        });
-    }
-
-    static stringify(value, space) {
-        const isObject = (x) => typeof x === 'object' && x !== null;
-        const isBuffer = (x) => {
-            return (isObject(x) && x.type === 'Buffer' && (Array.isArray(x.data) || typeof x.data === 'string'));
-        };
-        return JSON.stringify(value, (k, v) => {
-            if (isBuffer(v)) {
-                if (Array.isArray(v.data)) {
-                    if (v.data.length > 0) {
-                        v.data = `base64:${Buffer.from(v.data).toString('base64')}`;
-                    } else {
-                        v.data = '';
-                    }
-                }
-            }
-            return v;
-        }, space);
-    }
+	static isBufferLike(x) {
+		return (typeof x === 'object' && x !== null && x.type === 'Buffer' && (Array.isArray(x.data) || typeof x.data === 'string'));
+	}
 }
 
 module.exports = Util;
