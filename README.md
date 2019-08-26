@@ -1,20 +1,18 @@
 # Endb
 
-[![npm version](https://badgen.net/npm/v/endb)](https://www.npmjs.com/package/endb)
-[![build status](https://travis-ci.org/enhancd/endb.svg?branch=master)](https://travis-ci.org/enhancd/endb)
-[![npm downloads](https://badgen.net/npm/dt/endb)](https://www.npmjs.com/package/endb)
-[![github stars](https://badgen.net/github/stars/enhancd/endb)](https://github.com/enhancd/endb)
-[![node version](https://badgen.net/npm/node/endb)](https://www.npmjs.com/package/endb)
-[![license](https://badgen.net/github/license/enhancd/endb)](https://github.com/enhancd/endb/blob/master/LICENSE)
-[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
-[![patreon](https://img.shields.io/badge/donate-patreon-F96854.svg)](https://www.patreon.com/endb)
+[![NPM Version](https://badgen.net/npm/v/endb)](https://www.npmjs.com/package/endb)
+[![Build Status](https://travis-ci.org/enhancd/endb.svg?branch=master)](https://travis-ci.org/enhancd/endb)
+[![NPM Downloads](https://badgen.net/npm/dt/endb)](https://www.npmjs.com/package/endb)
+[![GitHub Stars](https://badgen.net/github/stars/enhancd/endb)](https://github.com/enhancd/endb)
+[![Node Version](https://badgen.net/npm/node/endb)](https://www.npmjs.com/package/endb)
+[![License](https://badgen.net/github/license/enhancd/endb)](https://github.com/enhancd/endb/blob/master/LICENSE)
+[![Patreon](https://img.shields.io/badge/donate-patreon-F96854.svg)](https://www.patreon.com/endb)
 
 Simple key-value database with cache and multi adapter support.
-Currently, supported adapters are LevelDB, MongoDB, MySQL, PostgreSQL, Redis, and SQLite.
-
-It follows [SemVer](http://semver.org/) and supports LTS version of Node.js or higher.
+Supported adapters are LevelDB, MongoDB, MySQL, PostgreSQL, Redis, and SQLite.
 
 New to Endb? Check out the [API Reference](https://endb.js.org)
+
 * High performance, efficiency, and safety
 * Simplistic, reliable, and fast
 * Simple [Promise-based API](#Usage)
@@ -27,18 +25,18 @@ New to Endb? Check out the [API Reference](https://endb.js.org)
 ```bash
 npm install --save endb
 ```
-By default, data is stored in the memory. You can optionally install a adapter.
+By default, data is stored in the memory. You can optionally install an adapter.
 ```bash
 $ npm install --save level # LevelDB
-$ npm install --save redis
 $ npm install --save mongojs # MongoDB
+$ npm install --save redis
 
 # To use SQL database, install an additional 'sql' package and the adapter
-$ npm install --save sql # Must install to use SQL databases
+$ npm install --save sql
 
-$ npm install --save sqlite3 # SQLite
-$ npm install --save pg # PostgreSQL
 $ npm install --save mysql2 # MySQL
+$ npm install --save pg # PostgreSQL
+$ npm install --save sqlite3 # SQLite
 ```
 
 ## Usage
@@ -46,7 +44,7 @@ $ npm install --save mysql2 # MySQL
 const Endb = require('endb');
 
 // Adapters
-const endb = new Endb(); // Memory
+const endb = new Endb();
 const endb = new Endb('leveldb://path/to/database');
 const endb = new Endb('redis://user:pass@localhost:6379');
 const endb = new Endb('mongodb://user:pass@localhost:27017/dbname');
@@ -55,13 +53,14 @@ const endb = new Endb('postgresql://user:pass@localhost:5432/dbname');
 const endb = new Endb('mysql://user:pass@localhost:3306/dbname');
 
 // Handles database connection error
-endb.on('error', err => console.log('Connection Error', err));
+endb.on('error', err => console.log('Connection Error: ', err));
 
 await endb.set('foo', 'bar'); // true
 await endb.get('foo'); // 'bar'
+await endb.get('foo', { raw: true }); // { value: 'bar' }
+await endb.has('foo'); // true
+await endb.has('bar'); // false
 await endb.delete('foo'); // true
-await endb.has('foo'); // false
-await endb.all(); // { ... }
 await endb.clear(); // undefined
 ```
 

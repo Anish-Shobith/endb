@@ -5,10 +5,12 @@
     "main": "src/index.js",
     "patreon": "endb",
     "scripts": {
-        "start": "npm run build:docs",
+        "test": "npm run lint && npx ava --serial",
+        "lint": "npx eslint src",
+        "lint:fix": "npx eslint --fix src",
         "build:docs": "npx jsdoc -c .jsdoc.json",
         "postinstall": "patreon-postinstall || exit 0",
-        "test": "ava"
+        "prepublishOnly": "npm run test && npm run build:docs"
     },
     "repository": {
         "type": "git",
@@ -27,11 +29,12 @@
     },
     "homepage": "https://endb.js.org",
     "dependencies": {
-        "patreon-postinstall": "^1.1.0"
+        "patreon-postinstall": "^1.1.1"
     },
     "devDependencies": {
         "ava": "^2.3.0",
         "better-docs": "^1.1.6",
+        "eslint": "^6.2.2",
         "jsdoc": "^3.6.3"
     }
 }
