@@ -23,10 +23,10 @@
         <div class="container">
             <nav class="navbar" role="navigation" aria-label="main navigation">
                 <div class="navbar-brand">
-                     
+                    
                         <img src="./docs/icon.png" alt="logo">
                     
-                     
+                    
                         <h1 class="navbar-item">Endb</h1>
                     
                     <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
@@ -35,7 +35,7 @@
                         <span aria-hidden="true"></span>
                     </a>
                 </div>
-                 
+                
                 <div class="navbar-menu">
                     <div class="navbar-end">
                     
@@ -68,7 +68,7 @@
                         <p>Title</p>
                         <h1>Home</h1>
                     </header>
-                    
+
                     
 
 
@@ -94,16 +94,15 @@
 
     <section>
         <article><h1>Endb</h1>
-<p><a href="https://www.npmjs.com/package/endb"><img src="https://badgen.net/npm/v/endb" alt="npm version"></a>
-<a href="https://www.npmjs.com/package/endb"><img src="https://badgen.net/npm/dt/endb" alt="npm downloads"></a>
-<a href="https://github.com/enhancd/endb"><img src="https://badgen.net/github/stars/enhancd/endb" alt="github stars"></a>
-<a href="https://www.npmjs.com/package/endb"><img src="https://badgen.net/npm/node/endb" alt="node version"></a>
-<a href="https://github.com/enhancd/endb/blob/master/LICENSE"><img src="https://badgen.net/github/license/enhancd/endb" alt="license"></a>
-<a href="https://github.com/semantic-release/semantic-release"><img src="https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg" alt="semantic-release"></a>
-<a href="https://www.patreon.com/endb"><img src="https://img.shields.io/badge/donate-patreon-F96854.svg" alt="patreon"></a></p>
+<p><a href="https://www.npmjs.com/package/endb"><img src="https://badgen.net/npm/v/endb" alt="NPM Version"></a>
+<a href="https://travis-ci.org/enhancd/endb"><img src="https://travis-ci.org/enhancd/endb.svg?branch=master" alt="Build Status"></a>
+<a href="https://www.npmjs.com/package/endb"><img src="https://badgen.net/npm/dt/endb" alt="NPM Downloads"></a>
+<a href="https://github.com/enhancd/endb"><img src="https://badgen.net/github/stars/enhancd/endb" alt="GitHub Stars"></a>
+<a href="https://www.npmjs.com/package/endb"><img src="https://badgen.net/npm/node/endb" alt="Node Version"></a>
+<a href="https://github.com/enhancd/endb/blob/master/LICENSE"><img src="https://badgen.net/github/license/enhancd/endb" alt="License"></a>
+<a href="https://www.patreon.com/endb"><img src="https://img.shields.io/badge/donate-patreon-F96854.svg" alt="Patreon"></a></p>
 <p>Simple key-value database with cache and multi adapter support.
-Currently, supported adapters are LevelDB, MongoDB, MySQL, PostgreSQL, Redis, and SQLite.</p>
-<p>It follows <a href="http://semver.org/">SemVer</a> and supports LTS version of Node.js or higher.</p>
+Supported adapters are LevelDB, MongoDB, MySQL, PostgreSQL, Redis, and SQLite.</p>
 <p>New to Endb? Check out the <a href="https://endb.js.org">API Reference</a></p>
 <ul>
 <li>High performance, efficiency, and safety</li>
@@ -117,23 +116,23 @@ Currently, supported adapters are LevelDB, MongoDB, MySQL, PostgreSQL, Redis, an
 <h2>Installation</h2>
 <pre class="prettyprint source lang-bash"><code>npm install --save endb
 </code></pre>
-<p>By default, data is stored in the memory. You can optionally install a adapter.</p>
+<p>By default, data is stored in the memory. You can optionally install an adapter.</p>
 <pre class="prettyprint source lang-bash"><code>$ npm install --save level # LevelDB
-$ npm install --save redis
 $ npm install --save mongojs # MongoDB
+$ npm install --save redis
 
 # To use SQL database, install an additional 'sql' package and the adapter
-$ npm install --save sql # Must install to use SQL databases
+$ npm install --save sql
 
-$ npm install --save sqlite3 # SQLite
-$ npm install --save pg # PostgreSQL
 $ npm install --save mysql2 # MySQL
+$ npm install --save pg # PostgreSQL
+$ npm install --save sqlite3 # SQLite
 </code></pre>
 <h2>Usage</h2>
 <pre class="prettyprint source lang-js"><code>const Endb = require('endb');
 
 // Adapters
-const endb = new Endb(); // Memory
+const endb = new Endb();
 const endb = new Endb('leveldb://path/to/database');
 const endb = new Endb('redis://user:pass@localhost:6379');
 const endb = new Endb('mongodb://user:pass@localhost:27017/dbname');
@@ -142,13 +141,14 @@ const endb = new Endb('postgresql://user:pass@localhost:5432/dbname');
 const endb = new Endb('mysql://user:pass@localhost:3306/dbname');
 
 // Handles database connection error
-endb.on('error', err => console.log('Connection Error', err));
+endb.on('error', err => console.log('Connection Error: ', err));
 
 await endb.set('foo', 'bar'); // true
 await endb.get('foo'); // 'bar'
+await endb.get('foo', { raw: true }); // { value: 'bar' }
+await endb.has('foo'); // true
+await endb.has('bar'); // false
 await endb.delete('foo'); // true
-await endb.has('foo'); // false
-await endb.all(); // { ... }
 await endb.clear(); // undefined
 </code></pre>
 <h3>Namespaces</h3>
@@ -200,16 +200,6 @@ const endb = new Endb({ store: new QuickLRU({ maxSize: 1000 }) });
             </div>
         </div>
     </div>
-
-<footer class="footer">
-    <div class="content has-text-centered">
-        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Aug 24 2019 23:42:17 GMT+0400 (Gulf Standard Time)</p>
-        <p class="sidebar-created-by">
-            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
-            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>
-        </p>
-    </div>
-</footer>
 
 <script> prettyPrint(); </script>
 <script src="scripts/app.min.js"></script>

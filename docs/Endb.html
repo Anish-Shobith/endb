@@ -23,10 +23,10 @@
         <div class="container">
             <nav class="navbar" role="navigation" aria-label="main navigation">
                 <div class="navbar-brand">
-                     
+                    
                         <img src="./docs/icon.png" alt="logo">
                     
-                     
+                    
                         <h1 class="navbar-item">Endb</h1>
                     
                     <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
@@ -35,7 +35,7 @@
                         <span aria-hidden="true"></span>
                     </a>
                 </div>
-                 
+                
                 <div class="navbar-menu">
                     <div class="navbar-end">
                     
@@ -68,7 +68,7 @@
                         <p>Class</p>
                         <h1>Endb</h1>
                     </header>
-                    
+
                     
 
 
@@ -153,7 +153,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line6">line 6</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line24">line 24</a>
             </span>
         </p>
     
@@ -222,7 +222,7 @@
     <h4 class="name" id="all">
         
         <span class="code-name">
-            all<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
+            all<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;(Object|Array.&lt;any>)>}</span>
         </span>
     </h4>
     
@@ -283,7 +283,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line61">line 61</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line79">line 79</a>
             </span>
         </p>
     
@@ -314,11 +314,13 @@
 
 <div class="columns">
     
+    <div class='param-desc column is-7'><p>All the elements.</p></div>
+    
     
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Promise.&lt;(Object|Array.&lt;any>)></span>
 
 
     </div>
@@ -406,7 +408,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line76">line 76</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line112">line 112</a>
             </span>
         </p>
     
@@ -436,6 +438,8 @@
                     
 
 <div class="columns">
+    
+    <div class='param-desc column is-7'><p>undefined</p></div>
     
     
     <div class='column is-5 has-text-left'>
@@ -523,9 +527,6 @@
   
       
 <span class="param-type">string</span>
-|
-
-<span class="param-type">number</span>
 
 
   
@@ -582,7 +583,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line88">line 88</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line124">line 124</a>
             </span>
         </p>
     
@@ -705,9 +706,6 @@
   
       
 <span class="param-type">string</span>
-|
-
-<span class="param-type">number</span>
 
 
   
@@ -859,7 +857,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line104">line 104</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line140">line 140</a>
             </span>
         </p>
     
@@ -913,6 +911,181 @@
     <h5>Example</h5>
     
     <pre class="prettyprint"><code>Endb.get('key').then(console.log).catch(console.error);</code></pre>
+
+
+</div>
+            
+                <div class="member">
+
+    
+    <h4 class="name" id="has">
+        
+        <span class="code-name">
+            has<span class="signature">(key)</span><span class="type-signature"> &rarr; {boolean}</span>
+        </span>
+    </h4>
+    
+
+    
+    <p class="summary">Checks if the database has the element.</p>
+    
+    
+    <div class="description">
+        <p>Checks if the database has the element.</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>key</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">string</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The key of the element.</p></td>
+</tr>
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="index.js.html" class="button">View Source</a>
+            <span>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line161">line 161</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>Whether or not, the element exists</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>Endb.has('key').then(console.log).catch(console.error);</code></pre>
 
 
 </div>
@@ -978,9 +1151,6 @@
   
       
 <span class="param-type">string</span>
-|
-
-<span class="param-type">number</span>
 
 
   
@@ -1062,7 +1232,7 @@
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line133">line 133</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line182">line 182</a>
             </span>
         </p>
     
@@ -1115,14 +1285,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>Endb.set('key', 'value').then(console.log).catch(console.error);
-Endb.set('userExists', true).then(console.log).catch(console.error);
-Endb.set('profile', {
-  id: 1234567890,
-  username: 'user',
-  description: 'A test user',
-  verified: true
-}).then(console.log).catch(console.error);</code></pre>
+    <pre class="prettyprint"><code>Endb.set('key', 'value').then(console.log).catch(console.error);Endb.set('userExists', true).then(console.log).catch(console.error);Endb.set('profile', {  id: 1234567890,  username: 'user',  description: 'A test user',  verified: true}).then(console.log).catch(console.error);</code></pre>
 
 
 </div>
@@ -1552,7 +1715,7 @@ Endb.set('profile', {
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line38">line 38</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line56">line 56</a>
             </span>
         </p>
     
@@ -1580,18 +1743,7 @@ Endb.set('profile', {
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>const db = new Endb(); // Memory
-const db = new Endb({
-    namespace: 'endb',
-    serialize: JSON.stringify,
-    deserialize: JSON.parse
-});
-const endb = new Endb('leveldb://path/to/database');
-const db = new Endb('redis://user:pass@localhost:6379');
-const db = new Endb('mongodb://user:pass@localhost:27017/dbname');
-const db = new Endb('sqlite://path/to/database.sqlite');
-const db = new Endb('postgresql://user:pass@localhost:5432/dbname');
-const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
+    <pre class="prettyprint"><code>const db = new Endb(); // Memoryconst db = new Endb({    namespace: 'endb',    serialize: JSON.stringify,    deserialize: JSON.parse});const endb = new Endb('leveldb://path/to/database');const db = new Endb('redis://user:pass@localhost:6379');const db = new Endb('mongodb://user:pass@localhost:27017/dbname');const db = new Endb('sqlite://path/to/database.sqlite');const db = new Endb('postgresql://user:pass@localhost:5432/dbname');const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
 
 
 </div>
@@ -1626,7 +1778,7 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
     <h4 class="name" id="all">
         
         <span class="code-name">
-            all<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span>
+            all<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;(Object|Array.&lt;any>)>}</span>
         </span>
     </h4>
     
@@ -1687,7 +1839,7 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line61">line 61</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line79">line 79</a>
             </span>
         </p>
     
@@ -1718,11 +1870,13 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
 
 <div class="columns">
     
+    <div class='param-desc column is-7'><p>All the elements.</p></div>
+    
     
     <div class='column is-5 has-text-left'>
         <label>Type: </label>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Promise.&lt;(Object|Array.&lt;any>)></span>
 
 
     </div>
@@ -1810,7 +1964,7 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line76">line 76</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line112">line 112</a>
             </span>
         </p>
     
@@ -1840,6 +1994,8 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
                     
 
 <div class="columns">
+    
+    <div class='param-desc column is-7'><p>undefined</p></div>
     
     
     <div class='column is-5 has-text-left'>
@@ -1927,9 +2083,6 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
   
       
 <span class="param-type">string</span>
-|
-
-<span class="param-type">number</span>
 
 
   
@@ -1986,7 +2139,7 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line88">line 88</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line124">line 124</a>
             </span>
         </p>
     
@@ -2109,9 +2262,6 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
   
       
 <span class="param-type">string</span>
-|
-
-<span class="param-type">number</span>
 
 
   
@@ -2263,7 +2413,7 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line104">line 104</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line140">line 140</a>
             </span>
         </p>
     
@@ -2317,6 +2467,181 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
     <h5>Example</h5>
     
     <pre class="prettyprint"><code>Endb.get('key').then(console.log).catch(console.error);</code></pre>
+
+
+</div>
+            
+                <div class="member">
+
+    
+    <h4 class="name" id="has">
+        
+        <span class="code-name">
+            has<span class="signature">(key)</span><span class="type-signature"> &rarr; {boolean}</span>
+        </span>
+    </h4>
+    
+
+    
+    <p class="summary">Checks if the database has the element.</p>
+    
+    
+    <div class="description">
+        <p>Checks if the database has the element.</p>
+    </div>
+    
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        
+<tr class="deep-level-0">
+  
+      <td class="name"><code>key</code></td>
+  
+
+  <td class="type">
+  
+      
+<span class="param-type">string</span>
+
+
+  
+  </td>
+
+  
+
+  
+
+  <td class="description last"><p>The key of the element.</p></td>
+</tr>
+
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+
+    
+
+    
+
+    
+        <p class="tag-source">
+            <a href="index.js.html" class="button">View Source</a>
+            <span>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line161">line 161</a>
+            </span>
+        </p>
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class='columns method-parameter'>
+        <div class="column is-2"><label>Returns:</label></div>
+        <div class="column is-10">
+            
+                    
+
+<div class="columns">
+    
+    <div class='param-desc column is-7'><p>Whether or not, the element exists</p></div>
+    
+    
+    <div class='column is-5 has-text-left'>
+        <label>Type: </label>
+        
+<span class="param-type">boolean</span>
+
+
+    </div>
+    
+</div>
+
+                
+        </div>
+    </div>
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>Endb.has('key').then(console.log).catch(console.error);</code></pre>
 
 
 </div>
@@ -2382,9 +2707,6 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
   
       
 <span class="param-type">string</span>
-|
-
-<span class="param-type">number</span>
 
 
   
@@ -2466,7 +2788,7 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
         <p class="tag-source">
             <a href="index.js.html" class="button">View Source</a>
             <span>
-                <a href="index.js.html">index.js</a>, <a href="index.js.html#line133">line 133</a>
+                <a href="index.js.html">index.js</a>, <a href="index.js.html#line182">line 182</a>
             </span>
         </p>
     
@@ -2519,14 +2841,7 @@ const db = new Endb('mysql://user:pass@localhost:3306/dbname');</code></pre>
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>Endb.set('key', 'value').then(console.log).catch(console.error);
-Endb.set('userExists', true).then(console.log).catch(console.error);
-Endb.set('profile', {
-  id: 1234567890,
-  username: 'user',
-  description: 'A test user',
-  verified: true
-}).then(console.log).catch(console.error);</code></pre>
+    <pre class="prettyprint"><code>Endb.set('key', 'value').then(console.log).catch(console.error);Endb.set('userExists', true).then(console.log).catch(console.error);Endb.set('profile', {  id: 1234567890,  username: 'user',  description: 'A test user',  verified: true}).then(console.log).catch(console.error);</code></pre>
 
 
 </div>
@@ -2549,16 +2864,6 @@ Endb.set('profile', {
             </div>
         </div>
     </div>
-
-<footer class="footer">
-    <div class="content has-text-centered">
-        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.3</a> on Sat Aug 24 2019 23:42:17 GMT+0400 (Gulf Standard Time)</p>
-        <p class="sidebar-created-by">
-            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
-            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>
-        </p>
-    </div>
-</footer>
 
 <script> prettyPrint(); </script>
 <script src="scripts/app.min.js"></script>
