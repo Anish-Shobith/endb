@@ -2,7 +2,8 @@ language: node_js
 branches:
 - master
 node_js:
-- 10
+  - '8'
+  - '10'
 deploy:
   provider: npm
   email: chroventer@gmail.com
