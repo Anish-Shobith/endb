@@ -8,7 +8,7 @@
         "test": "npx ava --serial",
         "build:docs": "npx jsdoc -c .jsdoc.json",
         "postinstall": "patreon-postinstall || exit 0",
-        "prepublishOnly": "npm run test && npm run build:docs"
+        "prepublishOnly": "npm run test"
     },
     "repository": {
         "type": "git",
