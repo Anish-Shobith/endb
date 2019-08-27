@@ -64,7 +64,7 @@ await endb.delete('foo'); // true
 await endb.clear(); // undefined
 ```
 
-### Namespaces
+## Namespaces
 You can set a namespace to avoid key collisions and namespaces allow you to clear only a certain namespace while using the same database.
 ```js
 const users = new Endb('redis://user:pass@localhost:6379', { namespace: 'users' });
@@ -79,7 +79,7 @@ await users.get('foo'); // undefined
 await cache.get('foo'); // 'cache'
 ```
 
-### Custom Serializers
+## Custom Serializers
 It uses JSON buffer for serialization and derialization of data to ensure consistency.
 You can optionally pass your own (de)serialization functions to support extra data types or to (de)serialize to something other than JSON.
 ```js
