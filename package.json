@@ -5,7 +5,7 @@
     "main": "src/index.js",
     "patreon": "endb",
     "scripts": {
-        "test": "npm run lint:fix && npx ava --serial",
+        "test": "npm run lint && npx ava --serial",
         "lint": "npx eslint src",
         "lint:fix": "npx eslint --fix src",
         "build:docs": "npx jsdoc -c .jsdoc.json",
