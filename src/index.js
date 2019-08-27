@@ -80,14 +80,6 @@ class Endb extends EventEmitter {
 		return Promise.resolve()
 			.then(() => {
 				if (this.options.store instanceof Map) {
-					/**
-					const array = [];
-					this.options.store.forEach(data => {
-						data = this.options.deserialize(data);
-						array.push(data);
-					});
-					return array;
-					*/
 					const array = [];
 					for (const [key, value] of this.options.store) {
 						const data = { key, value: this.options.deserialize(value).value };
